@@ -4,10 +4,11 @@ import { api } from '../api';
 function PEPs() {
   const [peps, setPeps] = useState([]);
   const [formData, setFormData] = useState({
+    Account_ID: '',
     PEP_ID: '',
     PEP_Name: '',
-    Position: '',
-    Country: '',
+    PEP_Relationship: '',
+    PEP_GovtPosition: '',
   });
 
   useEffect(() => {
@@ -29,10 +30,11 @@ function PEPs() {
       await api.post('/peps', formData);
       fetchPeps();
       setFormData({
+        Account_ID: '',
         PEP_ID: '',
         PEP_Name: '',
-        Position: '',
-        Country: '',
+        Relationship: '',
+        GovtPosition: '',
       });
     } catch (err) {
       console.error(err);
@@ -52,24 +54,27 @@ function PEPs() {
           />
         ))}
         <button type="submit">Add</button>
+        <button type="remove">Delete</button>
       </form>
 
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Account ID</th>
+            <th>PEP ID</th>
             <th>Name</th>
-            <th>Position</th>
-            <th>Country</th>
+            <th>Relationship</th>
+            <th>GovtPosition</th>
           </tr>
         </thead>
         <tbody>
           {peps.map((pep) => (
             <tr key={pep.PEP_ID}>
+              <td>{pep.Account_ID}</td>
               <td>{pep.PEP_ID}</td>
               <td>{pep.PEP_Name}</td>
-              <td>{pep.Position}</td>
-              <td>{pep.Country}</td>
+              <td>{pep.Relationship}</td>
+              <td>{pep.GovtPosition}</td>
             </tr>
           ))}
         </tbody>
