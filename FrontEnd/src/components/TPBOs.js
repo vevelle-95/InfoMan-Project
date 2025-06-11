@@ -4,9 +4,19 @@ import { api } from '../api';
 function TPBOs() {
   const [tpbos, setTpbos] = useState([]);
   const [formData, setFormData] = useState({
+    Account_ID: '',
     TPBO_ID: '',
+    TPBO_Type: '',
     TPBO_Name: '',
-    Relationship: '',
+    TPBO_Relationship: '',
+    TPBO_Residence: '',
+    TPBO_Birth_Date: '',
+    TPBO_Birth_Place: '',
+    TPBO_Sex: '',
+    TPBO_TIN: '',
+    TPBO_Nationality: '',
+    TPBO_Occupation: '',
+    TPBO_Number: '',
   });
 
   useEffect(() => {
@@ -30,7 +40,15 @@ function TPBOs() {
       setFormData({
         TPBO_ID: '',
         TPBO_Name: '',
-        Relationship: '',
+        TPBO_Relationship: '',
+        TPBO_Residence: '',
+        TPBO_Birth_Date: '',
+        TPBO_Birth_Place: '',
+        TPBO_Sex: '',
+        TPBO_TIN: '',
+        TPBO_Nationality: '',
+        TPBO_Occupation: '',
+        TPBO_Number: '',
       });
     } catch (err) {
       console.error(err);
@@ -50,14 +68,24 @@ function TPBOs() {
           />
         ))}
         <button type="submit">Add</button>
+        <button type="remove">Delete</button>
       </form>
 
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Account ID</th>
+            <th>TPBO ID</th>
             <th>Name</th>
             <th>Relationship</th>
+            <th>Residence</th>
+            <th>Birth Date</th>
+            <th>Birth Place</th>
+            <th>Sex</th>
+            <th>TIN</th>
+            <th>Nationality</th>
+            <th>Occupation</th>
+            <th>Number</th>
           </tr>
         </thead>
         <tbody>
@@ -66,6 +94,14 @@ function TPBOs() {
               <td>{tpbo.TPBO_ID}</td>
               <td>{tpbo.TPBO_Name}</td>
               <td>{tpbo.Relationship}</td>
+              <td>{tpbo.TPBO_Residence}</td>
+              <td>{tpbo.TPBO_Birth_Date}</td>
+              <td>{tpbo.TPBO_Birth_Place}</td>
+              <td>{tpbo.TPBO_Sex}</td>
+              <td>{tpbo.TPBO_TIN}</td>
+              <td>{tpbo.TPBO_Nationality}</td>
+              <td>{tpbo.TPBO_Occupation}</td>
+              <td>{tpbo.TPBO_Number}</td>
             </tr>
           ))}
         </tbody>
