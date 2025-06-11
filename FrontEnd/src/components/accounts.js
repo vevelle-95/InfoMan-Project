@@ -54,16 +54,17 @@ function Accounts() {
           />
         ))}
         <button type="submit">Add</button>
+        <button type="remove">Delete</button>
       </form>
 
       <table border="1" cellPadding="5">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Account ID</th>
             <th>Holder No</th>
             <th>Type</th>
             <th>Name</th>
-            <th>ITF</th>
+            <th>In-Turn-For</th>
           </tr>
         </thead>
         <tbody>
