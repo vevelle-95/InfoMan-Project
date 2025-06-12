@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
+import '../styles/FormStyles.css';
 
 function PEPs() {
   const [peps, setPeps] = useState([]);
@@ -33,8 +34,8 @@ function PEPs() {
         Account_ID: '',
         PEP_ID: '',
         PEP_Name: '',
-        Relationship: '',
-        GovtPosition: '',
+        PEP_Relationship: '',
+        PEP_GovtPosition: '',
       });
     } catch (err) {
       console.error(err);
@@ -42,29 +43,32 @@ function PEPs() {
   };
 
   return (
-    <div>
+    <div className="shared-container">
       <h2>PEPs</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
+            className="shared-input"
             key={key}
             placeholder={key}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
           />
         ))}
-        <button type="submit">Add</button>
-        <button type="remove">Delete</button>
+        <div className="shared-buttons">
+          <button type="submit">Add</button>
+          <button type="button">Delete</button>
+        </div>
       </form>
 
-      <table border="1" cellPadding="5">
+      <table className="shared-table">
         <thead>
           <tr>
             <th>Account ID</th>
             <th>PEP ID</th>
             <th>Name</th>
             <th>Relationship</th>
-            <th>GovtPosition</th>
+            <th>Govt Position</th>
           </tr>
         </thead>
         <tbody>
@@ -73,8 +77,8 @@ function PEPs() {
               <td>{pep.Account_ID}</td>
               <td>{pep.PEP_ID}</td>
               <td>{pep.PEP_Name}</td>
-              <td>{pep.Relationship}</td>
-              <td>{pep.GovtPosition}</td>
+              <td>{pep.PEP_Relationship}</td>
+              <td>{pep.PEP_GovtPosition}</td>
             </tr>
           ))}
         </tbody>
