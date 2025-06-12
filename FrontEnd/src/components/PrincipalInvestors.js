@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
+import '../styles/FormStyles.css';
 
 function PrincipalInvestors() {
   const [investors, setInvestors] = useState([]);
@@ -76,22 +77,25 @@ function PrincipalInvestors() {
   };
 
   return (
-    <div>
+    <div className="shared-container">
       <h2>Principal Investors</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
+            className="shared-input"
             key={key}
             placeholder={key}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
           />
         ))}
-        <button type="submit">Add</button>
-        <button type="remove">Delete</button>
+        <div className="shared-buttons">
+          <button type="submit">Add</button>
+          <button type="button">Delete</button>
+        </div>
       </form>
 
-      <table border="1" cellPadding="5">
+      <table className="shared-table">
         <thead>
           <tr>
             <th>Account ID</th>
@@ -105,17 +109,17 @@ function PrincipalInvestors() {
             <th>Sex</th>
             <th>Civil Status</th>
             <th>Birth Place</th>
-            <th>Email Address</th>
+            <th>Email</th>
             <th>SSS No</th>
             <th>Work No</th>
             <th>Occupation</th>
             <th>Nature of Work</th>
             <th>Job Description</th>
             <th>Company Name</th>
-            <th>Gross Annual Income</th> 
+            <th>Annual Income</th>
             <th>Work Address</th>
             <th>Mailing Address</th>
-            <th>PH TIN No.</th>
+            <th>PH TIN</th>
           </tr>
         </thead>
         <tbody>
@@ -136,7 +140,7 @@ function PrincipalInvestors() {
               <td>{inv.SSS_No}</td>
               <td>{inv.Princip_Investor_WorkNo}</td>
               <td>{inv.Princip_Investor_Occupation}</td>
-              <td>{inv.Nature_Work}</td> 
+              <td>{inv.Nature_Work}</td>
               <td>{inv.Job_Description}</td>
               <td>{inv.Company_Name}</td>
               <td>{inv.Gross_Annual_Income}</td>
