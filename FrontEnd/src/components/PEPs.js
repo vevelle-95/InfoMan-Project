@@ -74,7 +74,7 @@ function PEPs() {
         <tbody>
           {peps.map((pep) => (
             <tr key={pep.PEP_ID}>
-              <td>{pep.Account_ID}</td>
+              <td>{accounts.find(acc => acc.Accnt_ID === pep.Account_ID)?.Account_ID}</td>
               <td>{pep.PEP_ID}</td>
               <td>{pep.PEP_Name}</td>
               <td>{pep.PEP_Relationship}</td>
