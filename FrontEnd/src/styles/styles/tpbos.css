@@ -1,12 +1,17 @@
 .tpbo-container {
   max-width: 1200px;
   margin: 2rem auto;
+  padding:  0.15px 2em 2em 2em;
   font-family: 'Segoe UI', sans-serif;
+  background-color: #afaeaeaa;
+  border-radius: 5px;
 }
 
-h2 {
-  color: #003366;
+.tpbo-container h2 {
   margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #003366;
+  text-align: center;
 }
 
 .tpbo-form {
@@ -44,10 +49,14 @@ h2 {
   background-color: #0056b3;
 }
 
+
 .tpbo-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .tpbo-table th,
@@ -59,4 +68,39 @@ h2 {
 
 .tpbo-table th {
   background-color: #f2f2f2;
+}
+
+.tpbo-table td {
+  vertical-align: middle;
+}
+
+.tpbo-table td:last-child {
+  white-space: nowrap;
+}
+
+.tpbo-edit-btn,
+.tpbo-delete-btn {
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.2rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.tpbo-edit-btn {
+  background-color: #28a745; /* green */
+}
+
+.tpbo-edit-btn:hover {
+  background-color: #218838;
+}
+
+.tpbo-delete-btn {
+  background-color: #dc3545; /* red */
+}
+
+.tpbo-delete-btn:hover {
+  background-color: #c82333;
 }
