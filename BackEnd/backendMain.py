@@ -142,8 +142,13 @@ def single_pep(PEP_ID):
 
 @app.route('/tpbos', methods=['POST', 'GET'])
 def tpbos():
-    keys = ['TPBO_ID', 'TPBO_Name', 'Relationship']
+    keys = [
+        'Accnt_ID', 'TPBO_ID', 'TPBO_Type', 'TPBO_Name', 'TPBO_Relationship',
+        'TPBO_Residence', 'TPBO_Birth_Date', 'TPBO_Birth_Place', 'TPBO_Sex',
+        'TPBO_TIN', 'TPBO_Nationality', 'TPBO_Occupation', 'TPBO_Number'
+    ]
     return handle_crud('TPBOInformation', keys)
+
 
 @app.route('/tpbos/<string:TPBO_ID>', methods=['GET', 'PUT', 'DELETE'])
 def single_tpbo(TPBO_ID):
