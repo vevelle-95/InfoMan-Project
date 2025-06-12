@@ -1,0 +1,57 @@
+.shared-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.shared-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.shared-input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.shared-buttons {
+  grid-column: span 3;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.shared-buttons button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.shared-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.shared-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.shared-table th,
+.shared-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: middle;
+}
+
+.shared-table th {
+  background-color: #f2f2f2;
+}

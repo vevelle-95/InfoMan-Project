@@ -1,0 +1,62 @@
+.tpbo-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+  color: #003366;
+  margin-bottom: 1.5rem;
+}
+
+.tpbo-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tpbo-input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.tpbo-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.tpbo-buttons button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tpbo-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.tpbo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tpbo-table th,
+.tpbo-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.tpbo-table th {
+  background-color: #f2f2f2;
+}
