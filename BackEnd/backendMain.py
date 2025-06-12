@@ -150,6 +150,70 @@ def single_tpbo(TPBO_ID):
     identifier = {'TPBO_ID': TPBO_ID}
     return handle_crud('TPBOInformation', [], identifier)
 
+
+#create search functions for each table
+@app.route('/accounts/search', methods=['GET'])
+def search_accounts():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify({'error': 'Search query missing'}), 400
+
+    sql = """
+        SELECT * FROM AccountInformation
+        WHERE Accnt_Name LIKE %s OR Accnt_ID LIKE %s
+    """
+    values = (f'%{query}%', f'%{query}%')
+
+    result, status = run_query(sql, values, fetchall=True)
+    return jsonify(result), status
+@app.route('/principal-investors/search', methods=['GET'])
+def search_principal_investors():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify({'error': 'Search query missing'}), 400
+
+    sql = """
+        SELECT * FROM PrincipalInvestors
+        WHERE Princip_Investor_Name LIKE %s OR Accnt_ID LIKE %s
+    """
+    values = (f'%{query}%', f'%{query}%')
+
+    result, status = run_query(sql, values, fetchall=True)
+    return jsonify(result), status
+
+@app.route('/peps/search', methods=['GET'])
+def search_peps():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify({'error': 'Search query missing'}), 400
+
+    sql = """
+        SELECT * FROM PEPInformation
+        WHERE PEP_Name LIKE %s OR PEP_ID LIKE %s
+    """
+    values = (f'%{query}%', f'%{query}%')
+
+    result, status = run_query(sql, values, fetchall=True)
+    return jsonify(result), status
+
+@app.route('/tpbos/search', methods=['GET'])
+def search_tpbos():
+    query = request.args.get('q', '')
+    if not query:
+        return jsonify({'error': 'Search query missing'}), 400
+
+    sql = """
+        SELECT * FROM TPBOInformation
+        WHERE TPBO_Name LIKE %s OR TPBO_ID LIKE %s
+    """
+    values = (f'%{query}%', f'%{query}%')
+
+    result, status = run_query(sql, values, fetchall=True)
+    return jsonify(result), status
+
+
+
+
 # -------------------------------
 # Run the App
 # -------------------------------
