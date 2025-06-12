@@ -170,7 +170,9 @@ function TPBOs() {
               <td>{tpbo.TPBO_Name}</td>
               <td>{tpbo.TPBO_Relationship}</td>
               <td>{tpbo.TPBO_Residence}</td>
-              <td>{tpbo.TPBO_Birth_Date}</td>
+              <td>{tpbo.TPBO_Birth_Date && !isNaN(new Date(tpbo.TPBO_Birth_Date))
+                ? new Date(tpbo.TPBO_Birth_Date).toISOString().slice(0, 10)
+                : ''}</td>
               <td>{tpbo.TPBO_Birth_Place}</td>
               <td>{tpbo.TPBO_Sex}</td>
               <td>{tpbo.TPBO_TIN}</td>
