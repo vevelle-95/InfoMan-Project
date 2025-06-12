@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
+import '../styles/accounts.css';
 
 function Accounts() {
   const [accounts, setAccounts] = useState([]);
@@ -42,22 +43,25 @@ function Accounts() {
   };
 
   return (
-    <div>
+    <div className="shared-container">
       <h2>Accounts</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
+            className="shared-input"
             key={key}
             placeholder={key}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
           />
         ))}
-        <button type="submit">Add</button>
-        <button type="remove">Delete</button>
+        <div className="shared-buttons">
+          <button type="submit">Add</button>
+          <button type="button">Delete</button>
+        </div>
       </form>
 
-      <table border="1" cellPadding="5">
+      <table className="shared-table">
         <thead>
           <tr>
             <th>Account ID</th>
