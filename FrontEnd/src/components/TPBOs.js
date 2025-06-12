@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
+import '../styles/TPBOs.css';
 
 function TPBOs() {
   const [tpbos, setTpbos] = useState([]);
@@ -55,59 +56,64 @@ function TPBOs() {
     }
   };
 
-  return (
-    <div>
-      <h2>TPBOs</h2>
-      <form onSubmit={handleSubmit}>
-        {Object.keys(formData).map((key) => (
-          <input
-            key={key}
-            placeholder={key}
-            value={formData[key]}
-            onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-          />
-        ))}
-        <button type="submit">Add</button>
-        <button type="remove">Delete</button>
-      </form>
+return (
+  <div className="tpbo-container">
+    <h2>TPBOs</h2>
 
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            <th>Account ID</th>
-            <th>TPBO ID</th>
-            <th>Name</th>
-            <th>Relationship</th>
-            <th>Residence</th>
-            <th>Birth Date</th>
-            <th>Birth Place</th>
-            <th>Sex</th>
-            <th>TIN</th>
-            <th>Nationality</th>
-            <th>Occupation</th>
-            <th>Number</th>
+    <form className="tpbo-form" onSubmit={handleSubmit}>
+      {Object.keys(formData).map((key) => (
+        <input
+          key={key}
+          className="tpbo-input"
+          placeholder={key.replace(/_/g, ' ')}
+          value={formData[key]}
+          onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+        />
+      ))}
+      <div className="tpbo-buttons">
+        <button type="submit">Add</button>
+        <button type="button">Delete</button>
+      </div>
+    </form>
+
+    <table className="tpbo-table">
+      <thead>
+        <tr>
+          <th>Account ID</th>
+          <th>TPBO ID</th>
+          <th>Name</th>
+          <th>Relationship</th>
+          <th>Residence</th>
+          <th>Birth Date</th>
+          <th>Birth Place</th>
+          <th>Sex</th>
+          <th>TIN</th>
+          <th>Nationality</th>
+          <th>Occupation</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tpbos.map((tpbo) => (
+          <tr key={tpbo.TPBO_ID}>
+            <td>{tpbo.Account_ID}</td>
+            <td>{tpbo.TPBO_ID}</td>
+            <td>{tpbo.TPBO_Name}</td>
+            <td>{tpbo.TPBO_Relationship}</td>
+            <td>{tpbo.TPBO_Residence}</td>
+            <td>{tpbo.TPBO_Birth_Date}</td>
+            <td>{tpbo.TPBO_Birth_Place}</td>
+            <td>{tpbo.TPBO_Sex}</td>
+            <td>{tpbo.TPBO_TIN}</td>
+            <td>{tpbo.TPBO_Nationality}</td>
+            <td>{tpbo.TPBO_Occupation}</td>
+            <td>{tpbo.TPBO_Number}</td>
           </tr>
-        </thead>
-        <tbody>
-          {tpbos.map((tpbo) => (
-            <tr key={tpbo.TPBO_ID}>
-              <td>{tpbo.TPBO_ID}</td>
-              <td>{tpbo.TPBO_Name}</td>
-              <td>{tpbo.Relationship}</td>
-              <td>{tpbo.TPBO_Residence}</td>
-              <td>{tpbo.TPBO_Birth_Date}</td>
-              <td>{tpbo.TPBO_Birth_Place}</td>
-              <td>{tpbo.TPBO_Sex}</td>
-              <td>{tpbo.TPBO_TIN}</td>
-              <td>{tpbo.TPBO_Nationality}</td>
-              <td>{tpbo.TPBO_Occupation}</td>
-              <td>{tpbo.TPBO_Number}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 }
 
-export default TPBOs;
+export default TPBOs
