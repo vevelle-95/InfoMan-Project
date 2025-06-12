@@ -4,16 +4,20 @@ import '../styles/FormStyles.css';
 
 function PEPs() {
   const [peps, setPeps] = useState([]);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
-    Account_ID: '',
+    Accnt_ID: '',
     PEP_ID: '',
     PEP_Name: '',
     PEP_Relationship: '',
     PEP_GovtPosition: '',
   });
 
+  const [accounts, setAccounts] = useState([]);
+
   useEffect(() => {
     fetchPeps();
+    fetchAccounts();
   }, []);
 
   const fetchPeps = async () => {
@@ -25,21 +29,62 @@ function PEPs() {
     }
   };
 
+  const fetchAccounts = async () => {
+    try {
+      const res = await api.get('/accounts');
+      setAccounts(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/peps', formData);
-      fetchPeps();
+      if (editingId) {
+        await api.put(`/peps/${editingId}`, formData);
+      } else {
+        await api.post('/peps', formData);
+      }
+      setEditingId(null);
       setFormData({
-        Account_ID: '',
+        Accnt_ID: '',
         PEP_ID: '',
         PEP_Name: '',
         PEP_Relationship: '',
         PEP_GovtPosition: '',
       });
+      fetchPeps();
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this PEP?")) {
+      try {
+        await api.delete(`/peps/${id}`);
+        fetchPeps();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const handleEdit = (pep) => {
+    setEditingId(pep.PEP_ID);
+    setFormData(pep);
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setFormData({
+      Accnt_ID: '',
+      PEP_ID: '',
+      PEP_Name: '',
+      PEP_Relationship: '',
+      PEP_GovtPosition: '',
+    });
   };
 
   return (
@@ -50,14 +95,15 @@ function PEPs() {
           <input
             className="shared-input"
             key={key}
-            placeholder={key}
+            placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+            disabled={key === 'PEP_ID' && editingId !== null}
           />
         ))}
         <div className="shared-buttons">
-          <button type="submit">Add</button>
-          <button type="button">Delete</button>
+          <button type="submit">{editingId ? 'Update' : 'Add'}</button>
+          {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
         </div>
       </form>
 
@@ -69,16 +115,21 @@ function PEPs() {
             <th>Name</th>
             <th>Relationship</th>
             <th>Govt Position</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {peps.map((pep) => (
             <tr key={pep.PEP_ID}>
-              <td>{accounts.find(acc => acc.Accnt_ID === pep.Account_ID)?.Account_ID}</td>
+              <td>{accounts.find(acc => acc.Accnt_ID === pep.Accnt_ID)?.Accnt_ID || ''}</td>
               <td>{pep.PEP_ID}</td>
               <td>{pep.PEP_Name}</td>
               <td>{pep.PEP_Relationship}</td>
               <td>{pep.PEP_GovtPosition}</td>
+              <td>
+                <button onClick={() => handleEdit(pep)}>Edit</button>
+                <button onClick={() => handleDelete(pep.PEP_ID)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
