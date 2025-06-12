@@ -6,7 +6,7 @@ function TPBOs() {
   const [tpbos, setTpbos] = useState([]);
   const [editingId, setEditingId] = useState(null);  // Track if editing
   const [formData, setFormData] = useState({
-    Account_ID: '',
+    Accnt_ID: '',
     TPBO_ID: '',
     TPBO_Type: '',
     TPBO_Name: '',
@@ -62,7 +62,7 @@ function TPBOs() {
       }
       setEditingId(null);
       setFormData({
-        Account_ID: '',
+        Accnt_ID: '',
         TPBO_ID: '',
         TPBO_Type: '',
         TPBO_Name: '',
@@ -79,6 +79,7 @@ function TPBOs() {
       fetchTpbos();
     } catch (err) {
       console.error(err);
+      console.error(err.response?.data || err.message);
     }
   };
 
@@ -104,7 +105,7 @@ function TPBOs() {
   const handleCancel = () => {
     setEditingId(null);
     setFormData({
-      Account_ID: '',
+      Accnt_ID: '',
       TPBO_ID: '',
       TPBO_Type: '',
       TPBO_Name: '',
@@ -163,7 +164,7 @@ function TPBOs() {
         <tbody>
           {tpbos.map((tpbo) => (
             <tr key={tpbo.TPBO_ID}>
-              <td>{tpbo.Account_ID}</td>
+              <td>{accounts.find(acc => acc.Accnt_ID === tpbo.Accnt_ID)?.Accnt_ID}</td>
               <td>{tpbo.TPBO_ID}</td>
               <td>{tpbo.TPBO_Type}</td>
               <td>{tpbo.TPBO_Name}</td>
