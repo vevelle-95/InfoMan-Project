@@ -146,6 +146,7 @@ function TPBOs() {
           <tr>
             <th>Account ID</th>
             <th>TPBO ID</th>
+            <th>TPBO Type</th>
             <th>Name</th>
             <th>Relationship</th>
             <th>Residence</th>
@@ -156,7 +157,7 @@ function TPBOs() {
             <th>Nationality</th>
             <th>Occupation</th>
             <th>Number</th>
-            <th>Actions</th> {/* Actions column */}
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -164,6 +165,7 @@ function TPBOs() {
             <tr key={tpbo.TPBO_ID}>
               <td>{tpbo.Account_ID}</td>
               <td>{tpbo.TPBO_ID}</td>
+              <td>{tpbo.TPBO_Type}</td>
               <td>{tpbo.TPBO_Name}</td>
               <td>{tpbo.TPBO_Relationship}</td>
               <td>{tpbo.TPBO_Residence}</td>
