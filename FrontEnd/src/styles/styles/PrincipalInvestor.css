@@ -1,0 +1,75 @@
+.PrincipalInvestor-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #848682;
+  border-radius: 10px;
+}
+
+.PrincipalInvestor-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  color: #003366;
+  text-align: center;
+}
+
+/* Add spacing around form and buttons */
+.PrincipalInvestor-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.PrincipalInvestor-input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.PrincipalInvestor-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.PrincipalInvestor-buttons button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.PrincipalInvestor-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* Table styling */
+.PrincipalInvestor-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.PrincipalInvestor-table th,
+.PrincipalInvestor-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.PrincipalInvestor-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}

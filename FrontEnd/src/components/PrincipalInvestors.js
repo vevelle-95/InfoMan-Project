@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
+import '../styles/PrincipalInvestor.css';
 
 function PrincipalInvestors() {
   const [investors, setInvestors] = useState([]);
@@ -76,22 +77,25 @@ function PrincipalInvestors() {
   };
 
   return (
-    <div>
+    <div className="PrincipalInvestor-container">
       <h2>Principal Investors</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="PrincipalInvestor-form">
         {Object.keys(formData).map((key) => (
           <input
+            className="PrincipalInvestor-input"
             key={key}
             placeholder={key}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
           />
         ))}
-        <button type="submit">Add</button>
-        <button type="remove">Delete</button>
+        <div className="PrincipalInvestor-buttons">
+          <button type="submit">Add</button>
+          <button type="button">Delete</button>
+        </div>
       </form>
 
-      <table border="1" cellPadding="5">
+      <table className="PrincipalInvestor-table">
         <thead>
           <tr>
             <th>Account ID</th>
@@ -105,44 +109,44 @@ function PrincipalInvestors() {
             <th>Sex</th>
             <th>Civil Status</th>
             <th>Birth Place</th>
-            <th>Email Address</th>
+            <th>Email</th>
             <th>SSS No</th>
             <th>Work No</th>
             <th>Occupation</th>
             <th>Nature of Work</th>
             <th>Job Description</th>
             <th>Company Name</th>
-            <th>Gross Annual Income</th> 
+            <th>Annual Income</th>
             <th>Work Address</th>
             <th>Mailing Address</th>
-            <th>PH TIN No.</th>
+            <th>PH TIN</th>
           </tr>
         </thead>
         <tbody>
           {investors.map((inv) => (
-            <tr key={`${inv.Accnt_ID}-${inv.Princip_Investor_ID}`}>
-              <td>{inv.Accnt_ID}</td>
-              <td>{inv.Princip_Investor_ID}</td>
-              <td>{inv.Princip_Investor_Name}</td>
-              <td>{inv.Princip_Investor_Perma_Add}</td>
-              <td>{inv.Princip_Investor_Present_Add}</td>
-              <td>{inv.Princip_Investor_HomeNo}</td>
-              <td>{inv.Princip_Investor_Birth_Date}</td>
-              <td>{inv.Princip_Investor_Nationality}</td>
-              <td>{inv.Princip_Investor_Sex}</td>
-              <td>{inv.Princip_Investor_Civil_Status}</td>
-              <td>{inv.Princip_Investor_Birth_Place}</td>
-              <td>{inv.Princip_Investor_Email_Add}</td>
-              <td>{inv.SSS_No}</td>
-              <td>{inv.Princip_Investor_WorkNo}</td>
-              <td>{inv.Princip_Investor_Occupation}</td>
-              <td>{inv.Nature_Work}</td> 
-              <td>{inv.Job_Description}</td>
-              <td>{inv.Company_Name}</td>
-              <td>{inv.Gross_Annual_Income}</td>
-              <td>{inv.Princip_Investor_Work_Address}</td>
-              <td>{inv.Princip_Investor_Mailing_Address}</td>
-              <td>{inv.PH_TIN}</td>
+            <tr key={`${inv.Accnt_ID}-${PrincipInvestor.Princip_Investor_ID}`}>
+              <td>{accounts.find(acc => acc.Accnt_ID === PrincipInvestor.Accnt_ID)?.Accnt_ID}</td>
+              <td>{PrincipInvestor.Princip_Investor_ID}</td>
+              <td>{PrincipInvestor.Princip_Investor_Name}</td>
+              <td>{PrincipInvestor.Princip_Investor_Perma_Add}</td>
+              <td>{PrincipInvestor.Princip_Investor_Present_Add}</td>
+              <td>{PrincipInvestor.Princip_Investor_HomeNo}</td>
+              <td>{PrincipInvestor.Princip_Investor_Birth_Date}</td>
+              <td>{PrincipInvestor.Princip_Investor_Nationality}</td>
+              <td>{PrincipInvestor.Princip_Investor_Sex}</td>
+              <td>{PrincipInvestor.Princip_Investor_Civil_Status}</td>
+              <td>{PrincipInvestor.Princip_Investor_Birth_Place}</td>
+              <td>{PrincipInvestor.Princip_Investor_Email_Add}</td>
+              <td>{PrincipInvestor.SSS_No}</td>
+              <td>{PrincipInvestor.Princip_Investor_WorkNo}</td>
+              <td>{PrincipInvestor.Princip_Investor_Occupation}</td>
+              <td>{PrincipInvestor.Nature_Work}</td>
+              <td>{PrincipInvestor.Job_Description}</td>
+              <td>{PrincipInvestor.Company_Name}</td>
+              <td>{PrincipInvestor.Gross_Annual_Income}</td>
+              <td>{PrincipInvestor.Princip_Investor_Work_Address}</td>
+              <td>{PrincipInvestor.Princip_Investor_Mailing_Address}</td>
+              <td>{PrincipInvestor.PH_TIN}</td>
             </tr>
           ))}
         </tbody>
