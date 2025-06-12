@@ -170,7 +170,7 @@ function TPBOs() {
               <td>{tpbo.TPBO_Name}</td>
               <td>{tpbo.TPBO_Relationship}</td>
               <td>{tpbo.TPBO_Residence}</td>
-              <td>{tpbo.TPBO_Birth_Date && !isNaN(new Date(tpbo.TPBO_Birth_Date)) ? new Date(date).toLocaleDateString('en-CA'): ''}</td>
+              <td>  {tpbo.TPBO_Birth_Date && typeof tpbo.TPBO_Birth_Date === 'string' ? tpbo.TPBO_Birth_Date.includes('T') ? tpbo.TPBO_Birth_Date.split('T')[0] : tpbo.TPBO_Birth_Date : ''}</td>
               <td>{tpbo.TPBO_Birth_Place}</td>
               <td>{tpbo.TPBO_Sex}</td>
               <td>{tpbo.TPBO_TIN}</td>
