@@ -96,7 +96,7 @@ return (
       <tbody>
         {tpbos.map((tpbo) => (
           <tr key={tpbo.TPBO_ID}>
-            <td>{tpbo.Account_ID}</td>
+            <td>{accounts.find(acc => acc.Accnt_ID === tpbo.Account_ID)?.Account_ID}</td>
             <td>{tpbo.TPBO_ID}</td>
             <td>{tpbo.TPBO_Name}</td>
             <td>{tpbo.TPBO_Relationship}</td>
