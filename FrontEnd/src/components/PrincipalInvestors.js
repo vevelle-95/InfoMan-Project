@@ -4,6 +4,7 @@ import '../styles/PrincipalInvestor.css';
 
 function PrincipalInvestors() {
   const [investors, setInvestors] = useState([]);
+  const [accounts, setAccounts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     Accnt_ID: '',
@@ -32,12 +33,22 @@ function PrincipalInvestors() {
 
   useEffect(() => {
     fetchInvestors();
+    fetchAccounts();
   }, []);
 
   const fetchInvestors = async () => {
     try {
       const res = await api.get('/principal-investors');
       setInvestors(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchAccounts = async () => {
+    try {
+      const res = await api.get('/accounts');
+      setAccounts(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -52,51 +63,20 @@ function PrincipalInvestors() {
         await api.post('/principal-investors', formData);
       }
       setEditingId(null);
-      setFormData({
-        Accnt_ID: '',
-        Princip_Investor_ID: '',
-        Princip_Investor_Name: '',
-        Princip_Investor_Perma_Add: '',
-        Princip_Investor_Present_Add: '',
-        Princip_Investor_HomeNo: '',
-        Princip_Investor_Birth_Date: '',
-        Princip_Investor_Nationality: '',
-        Princip_Investor_Sex: '',
-        Princip_Investor_Civil_Status: '',
-        Princip_Investor_Birth_Place: '',
-        Princip_Investor_Email_Add: '',
-        SSS_No: '',
-        Princip_Investor_WorkNo: '',
-        Princip_Investor_Occupation: '',
-        Nature_Work: '',
-        Job_Description: '',
-        Company_Name: '',
-        Gross_Annual_Income: '',
-        Princip_Investor_Work_Address: '',
-        Princip_Investor_Mailing_Address: '',
-        PH_TIN: '',
-      });
+      resetForm();
       fetchInvestors();
     } catch (err) {
       console.error(err);
     }
   };
 
-       useEffect(() => {
-         const fetchAccounts = async () => {
-           try {
-             const res = await api.get('/accounts');
-             setAccounts(res.data);
-           } catch (err) {
-             console.error(err);
-           }
-         };
-       
-         fetchAccounts();
-       }, []);
+  const handleEdit = (investor) => {
+    setEditingId(investor.Princip_Investor_ID);
+    setFormData(investor);
+  };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this Principal Investor?")) {
+    if (window.confirm('Are you sure you want to delete this Principal Investor?')) {
       try {
         await api.delete(`/principal-investors/${id}`);
         fetchInvestors();
@@ -106,13 +86,12 @@ function PrincipalInvestors() {
     }
   };
 
-  const handleEdit = (inv) => {
-    setEditingId(inv.Princip_Investor_ID);
-    setFormData(inv);
-  };
-
   const handleCancel = () => {
     setEditingId(null);
+    resetForm();
+  };
+
+  const resetForm = () => {
     setFormData({
       Accnt_ID: '',
       Princip_Investor_ID: '',
@@ -139,13 +118,13 @@ function PrincipalInvestors() {
     });
   };
 
-  // Format date to yyyy-mm-dd only (remove GMT)
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    if (typeof dateStr === 'string' && dateStr.includes('T')) {
-      return dateStr.split('T')[0];
+  // Format birth date to yyyy-mm-dd only, no GMT
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    if (typeof dateString === 'string') {
+      return dateString.includes('T') ? dateString.split('T')[0] : dateString;
     }
-    return dateStr;
+    return '';
   };
 
   return (
@@ -154,21 +133,21 @@ function PrincipalInvestors() {
       <form onSubmit={handleSubmit} className="PrincipalInvestor-form">
         {Object.keys(formData).map((key) => (
           <input
-            className="PrincipalInvestor-input"
             key={key}
+            className="PrincipalInvestor-input"
             placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-            disabled={key === 'Princip_Investor_ID' && editingId !== null}
+            disabled={key === 'Princip_Investor_ID' && editingId !== null} // disable ID editing when updating
           />
         ))}
+
         <div className="PrincipalInvestor-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
           {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
         </div>
       </form>
 
-      {/* Scrollable wrapper */}
       <div className="PrincipalInvestor-table-container">
         <table className="PrincipalInvestor-table">
           <thead>
@@ -195,12 +174,13 @@ function PrincipalInvestors() {
               <th>Work Address</th>
               <th>Mailing Address</th>
               <th>PH TIN</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {investors.map((inv) => (
               <tr key={inv.Princip_Investor_ID}>
-                <td>{account.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID}</td>
+                <td>{accounts.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID || ''}</td>
                 <td>{inv.Princip_Investor_ID}</td>
                 <td>{inv.Princip_Investor_Name}</td>
                 <td>{inv.Princip_Investor_Perma_Add}</td>
@@ -222,6 +202,10 @@ function PrincipalInvestors() {
                 <td>{inv.Princip_Investor_Work_Address}</td>
                 <td>{inv.Princip_Investor_Mailing_Address}</td>
                 <td>{inv.PH_TIN}</td>
+                <td>
+                  <button onClick={() => handleEdit(inv)}>Edit</button>
+                  <button onClick={() => handleDelete(inv.Princip_Investor_ID)}>Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
