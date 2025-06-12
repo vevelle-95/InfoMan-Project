@@ -34,6 +34,21 @@ function TPBOs() {
     }
   };
 
+  const [accounts, setAccounts] = useState([]);
+
+  useEffect(() => {
+  const fetchAccounts = async () => {
+    try {
+      const res = await api.get('/accounts');
+      setAccounts(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchAccounts();
+}, []);
+
   // Add or update depending on editing state
   const handleSubmit = async (e) => {
     e.preventDefault();
