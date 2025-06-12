@@ -125,7 +125,7 @@ function PrincipalInvestors() {
         <tbody>
           {investors.map((inv) => (
             <tr key={`${inv.Accnt_ID}-${PrincipInvestor.Princip_Investor_ID}`}>
-              <td>{PrincipInvestor.Accnt_ID}</td>
+              <td>{accounts.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID}</td>
               <td>{PrincipInvestor.Princip_Investor_ID}</td>
               <td>{PrincipInvestor.Princip_Investor_Name}</td>
               <td>{PrincipInvestor.Princip_Investor_Perma_Add}</td>
