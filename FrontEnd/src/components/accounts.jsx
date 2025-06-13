@@ -47,17 +47,18 @@ function Accounts() {
     setEditingId(account.Accnt_ID);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await api.delete(`/accounts/${id}`);
-      fetchAccounts();
-      if (editingId === id) {
-        resetForm();
-      }
-    } catch (err) {
-      console.error(err);
+ const handleDelete = async (Accnt_ID, AccntHolder_No) => {
+  try {
+    await api.delete(`/accounts/${Accnt_ID}/${AccntHolder_No}`);
+    fetchAccounts();
+    if (editingId === Accnt_ID) {
+      resetForm();
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const handleCancel = () => {
     resetForm();
@@ -135,7 +136,7 @@ function Accounts() {
                   <td>{acc.Accnt_ITF}</td>
                   <td>
                     <button onClick={() => handleEdit(acc)}>Edit</button>
-                    <button onClick={() => handleDelete(acc.Accnt_ID)}>Delete</button>
+                    <button onClick={() => handleDelete(acc.Accnt_ID, acc.AccntHolder_No)}>Delete</button>
                   </td>
                 </tr>
               ))}
