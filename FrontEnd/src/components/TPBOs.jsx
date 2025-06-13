@@ -121,6 +121,13 @@ function TPBOs() {
     });
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    if (typeof dateString === 'string') {
+      return dateString.includes('T') ? dateString.split('T')[0] : dateString;
+    }
+    return '';
+  };
   return (
     <div className="tpbo-container">
       <h2>TPBOs</h2>
@@ -170,7 +177,7 @@ function TPBOs() {
               <td>{tpbo.TPBO_Name}</td>
               <td>{tpbo.TPBO_Relationship}</td>
               <td>{tpbo.TPBO_Residence}</td>
-              <td>  {tpbo.TPBO_Birth_Date}</td>
+              <td>{formatDate(tpbo.TPBO_Birth_Date)}</td>
               <td>{tpbo.TPBO_Birth_Place}</td>
               <td>{tpbo.TPBO_Sex}</td>
               <td>{tpbo.TPBO_TIN}</td>
