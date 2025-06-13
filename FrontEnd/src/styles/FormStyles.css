@@ -29,6 +29,7 @@
   font-size: 0.95rem;
 }
 
+/* Buttons in form */
 .shared-buttons {
   grid-column: span 5;
   display: flex;
@@ -44,12 +45,14 @@
   border-radius: 5px;
   font-size: 0.9rem;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .shared-buttons button:hover {
   background-color: #002934;
 }
 
+/* Table styling */
 .shared-table {
   width: 100%;
   border-collapse: collapse;
@@ -70,6 +73,25 @@
   white-space: nowrap;
 }
 
+/* Scrollable table container */
+.shared-table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+}
+
+/* Search bar */
+.shared-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Action buttons in table */
 .shared-edit-btn,
 .shared-delete-btn {
   padding: 0.4rem 0.8rem;
@@ -79,36 +101,21 @@
   color: white;
   font-size: 0.8rem;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .shared-edit-btn {
-  background-color: #28a745; /* green */
+  background-color: #218838; /* green */
 }
 
 .shared-edit-btn:hover {
-  background-color: #218838;
+  background-color: #1e7e34;
 }
 
 .shared-delete-btn {
-  background-color: #dc3545; /* red */
+  background-color: #c82333; /* red */
 }
 
 .shared-delete-btn:hover {
-  background-color: #c82333;
-}
-
-.shared-table-wrapper {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  margin-top: 1rem;
-}
-
-.shared-search {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
+  background-color: #a71d2a;
 }
