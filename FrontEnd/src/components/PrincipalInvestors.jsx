@@ -6,6 +6,8 @@ function PrincipalInvestors() {
   const [investors, setInvestors] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // ✅ Search filter
+
   const [formData, setFormData] = useState({
     Accnt_ID: '',
     Princip_Investor_ID: '',
@@ -118,38 +120,46 @@ function PrincipalInvestors() {
     });
   };
 
-  // Format birth date to yyyy-mm-dd only, no GMT
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    if (typeof dateString === 'string') {
-      return dateString.includes('T') ? dateString.split('T')[0] : dateString;
-    }
-    return '';
+    return typeof dateString === 'string' && dateString.includes('T')
+      ? dateString.split('T')[0]
+      : dateString;
   };
 
   return (
-    <div className="PrincipalInvestor-container">
+    <div className="shared-container">
       <h2>Principal Investors</h2>
-      <form onSubmit={handleSubmit} className="PrincipalInvestor-form">
+
+      {/* Search Field */}
+      <input
+        className="shared-search"
+        type="text"
+        placeholder="Search by Name, ID, Email, etc."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
+      <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
             key={key}
-            className="PrincipalInvestor-input"
+            className="shared-input"
             placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-            disabled={key === 'Princip_Investor_ID' && editingId !== null} // disable ID editing when updating
+            disabled={key === 'Princip_Investor_ID' && editingId !== null}
           />
         ))}
 
-        <div className="PrincipalInvestor-buttons">
+        <div className="shared-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
           {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
         </div>
       </form>
 
-      <div className="PrincipalInvestor-table-container">
-        <table className="PrincipalInvestor-table">
+      <div className="shared-table-wrapper scrollable-table">
+        <table className="shared-table">
           <thead>
             <tr>
               <th>Account ID</th>
@@ -178,36 +188,42 @@ function PrincipalInvestors() {
             </tr>
           </thead>
           <tbody>
-            {investors.map((inv) => (
-              <tr key={inv.Princip_Investor_ID}>
-                <td>{accounts.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID || ''}</td>
-                <td>{inv.Princip_Investor_ID}</td>
-                <td>{inv.Princip_Investor_Name}</td>
-                <td>{inv.Princip_Investor_Perma_Add}</td>
-                <td>{inv.Princip_Investor_Present_Add}</td>
-                <td>{inv.Princip_Investor_HomeNo}</td>
-                <td>{formatDate(inv.Princip_Investor_Birth_Date)}</td>
-                <td>{inv.Princip_Investor_Nationality}</td>
-                <td>{inv.Princip_Investor_Sex}</td>
-                <td>{inv.Princip_Investor_Civil_Status}</td>
-                <td>{inv.Princip_Investor_Birth_Place}</td>
-                <td>{inv.Princip_Investor_Email_Add}</td>
-                <td>{inv.SSS_No}</td>
-                <td>{inv.Princip_Investor_WorkNo}</td>
-                <td>{inv.Princip_Investor_Occupation}</td>
-                <td>{inv.Nature_Work}</td>
-                <td>{inv.Job_Description}</td>
-                <td>{inv.Company_Name}</td>
-                <td>{inv.Gross_Annual_Income}</td>
-                <td>{inv.Princip_Investor_Work_Address}</td>
-                <td>{inv.Princip_Investor_Mailing_Address}</td>
-                <td>{inv.PH_TIN}</td>
-                <td>
-                  <button onClick={() => handleEdit(inv)}>Edit</button>
-                  <button onClick={() => handleDelete(inv.Princip_Investor_ID)}>Delete</button>
-                </td>
-              </tr>
-            ))}
+            {investors
+              .filter((inv) =>
+                Object.values(inv).some((value) =>
+                  value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+                )
+              )
+              .map((inv) => (
+                <tr key={inv.Princip_Investor_ID}>
+                  <td>{accounts.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID || ''}</td>
+                  <td>{inv.Princip_Investor_ID}</td>
+                  <td>{inv.Princip_Investor_Name}</td>
+                  <td>{inv.Princip_Investor_Perma_Add}</td>
+                  <td>{inv.Princip_Investor_Present_Add}</td>
+                  <td>{inv.Princip_Investor_HomeNo}</td>
+                  <td>{formatDate(inv.Princip_Investor_Birth_Date)}</td>
+                  <td>{inv.Princip_Investor_Nationality}</td>
+                  <td>{inv.Princip_Investor_Sex}</td>
+                  <td>{inv.Princip_Investor_Civil_Status}</td>
+                  <td>{inv.Princip_Investor_Birth_Place}</td>
+                  <td>{inv.Princip_Investor_Email_Add}</td>
+                  <td>{inv.SSS_No}</td>
+                  <td>{inv.Princip_Investor_WorkNo}</td>
+                  <td>{inv.Princip_Investor_Occupation}</td>
+                  <td>{inv.Nature_Work}</td>
+                  <td>{inv.Job_Description}</td>
+                  <td>{inv.Company_Name}</td>
+                  <td>{inv.Gross_Annual_Income}</td>
+                  <td>{inv.Princip_Investor_Work_Address}</td>
+                  <td>{inv.Princip_Investor_Mailing_Address}</td>
+                  <td>{inv.PH_TIN}</td>
+                  <td>
+                    <button onClick={() => handleEdit(inv)}>Edit</button>
+                    <button onClick={() => handleDelete(inv.Princip_Investor_ID)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
