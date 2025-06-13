@@ -124,9 +124,16 @@ def single_account(Accnt_ID, AccntHolder_No):
 # You can now easily add new modules:
 @app.route('/principal-investors', methods=['POST', 'GET'])
 def principal_investors():
-    keys = [
+     keys = [
         'Accnt_ID', 'Princip_Investor_ID', 'Princip_Investor_Name',
-        'Princip_Investor_Birth_Date', 'Princip_Investor_Nationality'
+        'Princip_Investor_Birth_Date', 'Princip_Investor_Nationality',
+        'Princip_Investor_Perma_Add', 'Princip_Investor_Present_Add',
+        'Princip_Investor_HomeNo', 'Princip_Investor_Sex',
+        'Princip_Investor_Civil_Status', 'Princip_Investor_Birth_Place',
+        'Princip_Investor_Email_Add', 'SSS_No', 'Princip_Investor_WorkNo',
+        'Princip_Investor_Occupation', 'Nature_Work', 'Job_Description',
+        'Company_Name', 'Gross_Annual_Income', 'Princip_Investor_Work_Address',
+        'Princip_Investor_Mailing_Address', 'PH_TIN'
     ]
     return handle_crud('PrincipalInvestors', keys)
 
