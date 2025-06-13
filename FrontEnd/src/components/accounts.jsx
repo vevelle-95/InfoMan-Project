@@ -50,15 +50,17 @@ function Accounts() {
   };
 
   const handleDelete = async (Accnt_ID, AccntHolder_No) => {
-  try {
-    await api.delete(`/accounts/${Accnt_ID}/${AccntHolder_No}`);
-    fetchAccounts();
-    if (editingAccntID === Accnt_ID && editingHolderNo === AccntHolder_No) {
-      resetForm();
+    if (window.confirm("Are you sure you want to delete this account?")) {
+      try {
+        await api.delete(`/accounts/${Accnt_ID}/${parseInt(AccntHolder_No)}`);
+        fetchAccounts();
+        if (editingAccntID === Accnt_ID && editingHolderNo === AccntHolder_No) {
+          resetForm();
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
-  } catch (err) {
-    console.error(err);
-  }
   };
 
   const handleCancel = () => {
