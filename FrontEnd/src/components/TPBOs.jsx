@@ -34,9 +34,15 @@ function TPBOs() {
     try {
       const endpoint = query ? `/tpbos/search?q=${encodeURIComponent(query)}` : '/tpbos';
       const res = await api.get(endpoint);
-      setTpbos(res.data);
+      if (Array.isArray(res.data)) {
+        setTpbos(res.data);
+      } else {
+        console.error('Expected array but got:', res.data);
+        setTpbos([]);
+      }
     } catch (err) {
       console.error(err);
+      setTpbos([]);
     }
   };
 
@@ -60,14 +66,27 @@ function TPBOs() {
     debouncedSearch(value);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date)) return dateString;
+    return date.toISOString().split('T')[0]; // YYYY-MM-DD
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...formData,
+        TPBO_Birth_Date: formatDate(formData.TPBO_Birth_Date)
+      };
+
       if (editingId) {
-        await api.put(`/tpbos/${editingId}`, formData);
+        await api.put(`/tpbos/${editingId}`, payload);
       } else {
-        await api.post('/tpbos', formData);
+        await api.post('/tpbos', payload);
       }
+
       setEditingId(null);
       setFormData({
         Accnt_ID: '',
@@ -84,6 +103,7 @@ function TPBOs() {
         TPBO_Occupation: '',
         TPBO_Number: '',
       });
+
       fetchTpbos();
     } catch (err) {
       console.error(err);
@@ -104,7 +124,10 @@ function TPBOs() {
 
   const handleEdit = (tpbo) => {
     setEditingId(tpbo.TPBO_ID);
-    setFormData(tpbo);
+    setFormData({
+      ...tpbo,
+      TPBO_Birth_Date: formatDate(tpbo.TPBO_Birth_Date),
+    });
   };
 
   const handleCancel = () => {
@@ -125,11 +148,7 @@ function TPBOs() {
       TPBO_Number: '',
     });
   };
-  const formatDate = (dateStr) => {Add commentMore actions
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return isNaN(date) ? '' : date.toISOString().split('T')[0];
-  };
+
   return (
     <div className="tpbo-container">
       <h2>TPBOs</h2>
@@ -147,15 +166,20 @@ function TPBOs() {
           <input
             key={key}
             className="tpbo-input"
+            type={key === 'TPBO_Birth_Date' ? 'date' : 'text'}
             placeholder={key.replace(/_/g, ' ')}
-            value={formData[key]}
+            value={key === 'TPBO_Birth_Date' ? formatDate(formData[key]) : formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
             disabled={key === 'TPBO_ID' && editingId !== null}
           />
         ))}
         <div className="tpbo-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-          {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
+          {editingId && (
+            <button type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
@@ -180,27 +204,32 @@ function TPBOs() {
             </tr>
           </thead>
           <tbody>
-            {tpbos.map((tpbo) => (
-              <tr key={tpbo.TPBO_ID}>
-                <td>{accounts.find(acc => acc.Accnt_ID === tpbo.Accnt_ID)?.Accnt_ID}</td>
-                <td>{tpbo.TPBO_ID}</td>
-                <td>{tpbo.TPBO_Type}</td>
-                <td>{tpbo.TPBO_Name}</td>
-                <td>{tpbo.TPBO_Relationship}</td>
-                <td>{tpbo.TPBO_Residence}</td>
-                <td>{formatDate(tpbo.TPBO_Birth_Date)}</td>
-                <td>{tpbo.TPBO_Birth_Place}</td>
-                <td>{tpbo.TPBO_Sex}</td>
-                <td>{tpbo.TPBO_TIN}</td>
-                <td>{tpbo.TPBO_Nationality}</td>
-                <td>{tpbo.TPBO_Occupation}</td>
-                <td>{tpbo.TPBO_Number}</td>
-                <td>
-                  <button className="tpbo-edit-btn" onClick={() => handleEdit(tpbo)}>Edit</button>
-                  <button className="tpbo-delete-btn" onClick={() => handleDelete(tpbo.TPBO_ID)}>Delete</button>
-                </td>
-              </tr>
-            ))}
+            {Array.isArray(tpbos) &&
+              tpbos.map((tpbo) => (
+                <tr key={tpbo.TPBO_ID}>
+                  <td>{accounts.find((acc) => acc.Accnt_ID === tpbo.Accnt_ID)?.Accnt_ID}</td>
+                  <td>{tpbo.TPBO_ID}</td>
+                  <td>{tpbo.TPBO_Type}</td>
+                  <td>{tpbo.TPBO_Name}</td>
+                  <td>{tpbo.TPBO_Relationship}</td>
+                  <td>{tpbo.TPBO_Residence}</td>
+                  <td>{formatDate(tpbo.TPBO_Birth_Date)}</td>
+                  <td>{tpbo.TPBO_Birth_Place}</td>
+                  <td>{tpbo.TPBO_Sex}</td>
+                  <td>{tpbo.TPBO_TIN}</td>
+                  <td>{tpbo.TPBO_Nationality}</td>
+                  <td>{tpbo.TPBO_Occupation}</td>
+                  <td>{tpbo.TPBO_Number}</td>
+                  <td>
+                    <button className="tpbo-edit-btn" onClick={() => handleEdit(tpbo)}>
+                      Edit
+                    </button>
+                    <button className="tpbo-delete-btn" onClick={() => handleDelete(tpbo.TPBO_ID)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
