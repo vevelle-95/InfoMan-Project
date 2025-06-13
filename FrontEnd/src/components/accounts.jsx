@@ -127,7 +127,7 @@ function Accounts() {
                 )
               )
               .map((acc) => (
-                <tr key={`${acc.Accnt_ID}-${acc.AccntHolder_No}`}>
+                <tr key={acc.Accnt_ID}>
                   <td>{acc.Accnt_ID}</td>
                   <td>{acc.AccntHolder_No}</td>
                   <td>{acc.Accnt_Type}</td>
