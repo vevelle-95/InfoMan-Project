@@ -6,17 +6,14 @@ import datetime
 app = Flask(__name__)
 CORS(app)
 
-
-# Database Configuration for connection
-
+# Database Configuration
 db_config = {
     'host': 'localhost',
     'port': 3306,
     'user': 'root',
-    'password': 'Revolution_1986',
-    'database': 'InvestmentAccountsDB'
+    'password': 'ivelle95',
+    'database': 'investmentaccountsdb',
 }
-
 
 def get_db_connection():
     try:
@@ -60,9 +57,7 @@ def validate_date(date_str):
     except ValueError:
         return False
 
-
-# Generic CRUD for the tables
-
+# Generic CRUD Handler
 def handle_crud(table, keys, identifier=None):
     if request.method == 'POST':
         data = request.json
@@ -81,7 +76,7 @@ def handle_crud(table, keys, identifier=None):
         query = f"SELECT * FROM {table}"
         values = ()
         if identifier:
-            where_clause = ' AND '.join([f"{k} = %s" for k in identifier.keys()])
+            where_clause = ' AND '.join([f"{k} = %s" for k in identifier])
             query += f" WHERE {where_clause}"
             values = tuple(identifier.values())
 
@@ -90,8 +85,8 @@ def handle_crud(table, keys, identifier=None):
 
     elif request.method == 'PUT' and identifier:
         data = request.json
-        set_clause = ', '.join([f"{k} = %s" for k in data.keys()])
-        where_clause = ' AND '.join([f"{k} = %s" for k in identifier.keys()])
+        set_clause = ', '.join([f"{k} = %s" for k in data])
+        where_clause = ' AND '.join([f"{k} = %s" for k in identifier])
         values = tuple(data.values()) + tuple(identifier.values())
 
         query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
@@ -99,17 +94,14 @@ def handle_crud(table, keys, identifier=None):
         return jsonify(result), status
 
     elif request.method == 'DELETE' and identifier:
-        where_clause = ' AND '.join([f"{k} = %s" for k in identifier.keys()])
+        where_clause = ' AND '.join([f"{k} = %s" for k in identifier])
         values = tuple(identifier.values())
 
         query = f"DELETE FROM {table} WHERE {where_clause}"
         result, status = run_query(query, values, commit=True)
         return jsonify(result), status
 
-
-# Routes using Generic CRUD for easier handle
-#note: weak to very specific  ruds
-
+# Route Definitions
 @app.route('/accounts', methods=['POST', 'GET'])
 def accounts():
     keys = ['Accnt_ID', 'AccntHolder_No', 'Accnt_Type', 'Accnt_Name', 'Accnt_ITF']
@@ -159,9 +151,7 @@ def single_tpbo(TPBO_ID):
     identifier = {'TPBO_ID': TPBO_ID}
     return handle_crud('TPBOInformation', [], identifier)
 
-# -------------------------------
 # Search Routes
-# -------------------------------
 @app.route('/accounts/search', methods=['GET'])
 def search_accounts():
     query = request.args.get('q', '')
@@ -173,7 +163,6 @@ def search_accounts():
         WHERE Accnt_Name LIKE %s OR Accnt_ID LIKE %s
     """
     values = (f'%{query}%', f'%{query}%')
-
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
@@ -188,7 +177,6 @@ def search_principal_investors():
         WHERE Princip_Investor_Name LIKE %s OR Accnt_ID LIKE %s
     """
     values = (f'%{query}%', f'%{query}%')
-
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
@@ -203,7 +191,6 @@ def search_peps():
         WHERE PEP_Name LIKE %s OR PEP_ID LIKE %s
     """
     values = (f'%{query}%', f'%{query}%')
-
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
@@ -214,15 +201,27 @@ def search_tpbos():
         return jsonify({'error': 'Search query missing'}), 400
 
     sql = """
-        SELECT * FROM TPBOInformation
-        WHERE TPBO_Name LIKE %s OR TPBO_ID LIKE %s
+        SELECT DISTINCT TPBOInformation.*
+        FROM TPBOInformation
+        JOIN AccountInformation ON TPBOInformation.Accnt_ID = AccountInformation.Accnt_ID
+        WHERE LOWER(AccountInformation.Accnt_ID) LIKE LOWER(%s)
+           OR LOWER(TPBO_Name) LIKE LOWER(%s)
+           OR LOWER(TPBO_ID) LIKE LOWER(%s)
+           OR LOWER(TPBO_Type) LIKE LOWER(%s)
+           OR LOWER(TPBO_Relationship) LIKE LOWER(%s)
+           OR LOWER(TPBO_Residence) LIKE LOWER(%s)
+           OR LOWER(TPBO_Birth_Date) LIKE LOWER(%s)
+           OR LOWER(TPBO_Birth_Place) LIKE LOWER(%s)
+           OR LOWER(TPBO_Sex) LIKE LOWER(%s)
+           OR LOWER(TPBO_TIN) LIKE LOWER(%s)
+           OR LOWER(TPBO_Nationality) LIKE LOWER(%s)
+           OR LOWER(TPBO_Occupation) LIKE LOWER(%s)
+           OR LOWER(TPBO_Number) LIKE LOWER(%s)
     """
-    values = (f'%{query}%', f'%{query}%')
-
+    values = tuple([f'%{query}%'] * 13)
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
 # Run the App
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
