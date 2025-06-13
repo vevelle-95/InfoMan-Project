@@ -11,7 +11,8 @@ function Accounts() {
     Accnt_Name: '',
     Accnt_ITF: '',
   });
-  const [editingId, setEditingId] = useState(null); // track which account is being edited
+  const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchAccounts();
@@ -30,10 +31,8 @@ function Accounts() {
     e.preventDefault();
     try {
       if (editingId) {
-        // Update
         await api.put(`/accounts/${editingId}`, formData);
       } else {
-        // Create
         await api.post('/accounts', formData);
       }
       fetchAccounts();
@@ -54,7 +53,6 @@ function Accounts() {
     try {
       await api.delete(`/accounts/${id}`);
       fetchAccounts();
-      // Reset form if deleting the account being edited
       if (editingId === id) {
         setFormData({
           Accnt_ID: '',
@@ -78,6 +76,7 @@ function Accounts() {
   return (
     <div className="shared-container">
       <h2>Accounts</h2>
+
       <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
@@ -119,33 +118,48 @@ function Accounts() {
         </div>
       </form>
 
-      <table className="shared-table">
-        <thead>
-          <tr>
-            <th>Account ID</th>
-            <th>Holder No</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>In-Turn-For</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {accounts.map((acc) => (
-            <tr key={`${acc.Accnt_ID}-${acc.AccntHolder_No}`}>
-              <td>{acc.Accnt_ID}</td>
-              <td>{acc.AccntHolder_No}</td>
-              <td>{acc.Accnt_Type}</td>
-              <td>{acc.Accnt_Name}</td>
-              <td>{acc.Accnt_ITF}</td>
-              <td>
-                <button onClick={() => handleEdit(acc)}>Edit</button>
-                <button onClick={() => handleDelete(acc.Accnt_ID)}>Delete</button>
-              </td>
+      <input
+        className="shared-input"
+        placeholder="Search by Account Name or ID"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '1rem' }}
+      />
+
+      <div className="table-scroll">
+        <table className="shared-table">
+          <thead>
+            <tr>
+              <th>Account ID</th>
+              <th>Holder No</th>
+              <th>Type</th>
+              <th>Name</th>
+              <th>In-Turn-For</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {accounts
+              .filter((acc) =>
+                acc.Accnt_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                acc.Accnt_ID.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((acc) => (
+                <tr key={`${acc.Accnt_ID}-${acc.AccntHolder_No}`}>
+                  <td>{acc.Accnt_ID}</td>
+                  <td>{acc.AccntHolder_No}</td>
+                  <td>{acc.Accnt_Type}</td>
+                  <td>{acc.Accnt_Name}</td>
+                  <td>{acc.Accnt_ITF}</td>
+                  <td>
+                    <button onClick={() => handleEdit(acc)}>Edit</button>
+                    <button onClick={() => handleDelete(acc.Accnt_ID)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
