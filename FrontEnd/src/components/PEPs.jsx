@@ -4,7 +4,10 @@ import '../styles/FormStyles.css';
 
 function PEPs() {
   const [peps, setPeps] = useState([]);
+  const [accounts, setAccounts] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [formData, setFormData] = useState({
     Accnt_ID: '',
     PEP_ID: '',
@@ -12,9 +15,6 @@ function PEPs() {
     PEP_Relationship: '',
     PEP_GovtPosition: '',
   });
-
-  const [accounts, setAccounts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchPeps();
@@ -47,6 +47,7 @@ function PEPs() {
       } else {
         await api.post('/peps', formData);
       }
+      fetchPeps();
       setEditingId(null);
       setFormData({
         Accnt_ID: '',
@@ -55,7 +56,6 @@ function PEPs() {
         PEP_Relationship: '',
         PEP_GovtPosition: '',
       });
-      fetchPeps();
     } catch (err) {
       console.error(err);
     }
@@ -66,6 +66,16 @@ function PEPs() {
       try {
         await api.delete(`/peps/${id}`);
         fetchPeps();
+        if (editingId === id) {
+          setFormData({
+            Accnt_ID: '',
+            PEP_ID: '',
+            PEP_Name: '',
+            PEP_Relationship: '',
+            PEP_GovtPosition: '',
+          });
+          setEditingId(null);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -73,8 +83,8 @@ function PEPs() {
   };
 
   const handleEdit = (pep) => {
-    setEditingId(pep.PEP_ID);
     setFormData(pep);
+    setEditingId(pep.PEP_ID);
   };
 
   const handleCancel = () => {
@@ -88,23 +98,28 @@ function PEPs() {
     });
   };
 
-  // Filter peps by search term (search in PEP_Name or PEP_ID or Accnt_ID)
-  const filteredPeps = peps.filter(
-    (pep) =>
-      pep.PEP_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pep.PEP_ID.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pep.Accnt_ID.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPeps = peps.filter((pep) =>
+    Object.values(pep).some((value) =>
+      value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
   );
 
   return (
     <div className="shared-container">
       <h2>PEPs</h2>
 
+      <input
+        className="shared-search"
+        placeholder="Search by any field..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
       <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
-            className="shared-input"
             key={key}
+            className="shared-input"
             placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
@@ -113,23 +128,11 @@ function PEPs() {
         ))}
         <div className="shared-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-          {editingId && (
-            <button type="button" onClick={handleCancel}>
-              Cancel
-            </button>
-          )}
+          {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
         </div>
       </form>
 
-      <input
-        className="shared-input"
-        placeholder="Search by PEP Name, PEP ID, or Account ID"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: '1rem' }}
-      />
-
-      <div className="table-scroll">
+      <div className="shared-table-wrapper">
         <table className="shared-table">
           <thead>
             <tr>
