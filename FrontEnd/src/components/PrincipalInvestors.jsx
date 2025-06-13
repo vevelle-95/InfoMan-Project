@@ -120,17 +120,12 @@ function PrincipalInvestors() {
     });
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    return typeof dateString === 'string' && dateString.includes('T')
-      ? dateString.split('T')[0]
-      : dateString;
-  };
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return isNaN(date) ? '' : date.toISOString().split('T')[0];
   };
+  
   return (
     <div className="shared-container">
       <h2>Principal Investors</h2>
