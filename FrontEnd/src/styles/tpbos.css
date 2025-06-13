@@ -1,33 +1,11 @@
 .tpbo-container {
   max-width: 1200px;
   margin: 2rem auto;
-  padding:  0.15px 2em 2em 2em;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #EAAB00;
-  border-color: #003946;
-  border-radius: 5px;
-  border: 3px solid #003946;
-}
-
-.tpbo-container h2 {
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  color: #003946;
-  text-align: center;
-}
-
-.tpbo-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;.tpbo-container {
-  max-width: 1200px;
-  margin: 2rem auto;
   padding: 0.15px 2em 2em 2em;
   font-family: 'Segoe UI', sans-serif;
   background-color: #EAAB00;
-  border-color: #003946;
-  border-radius: 5px;
   border: 3px solid #003946;
+  border-radius: 5px;
 }
 
 .tpbo-container h2 {
@@ -52,7 +30,7 @@
 }
 
 .tpbo-buttons {
-  grid-column: span 2;
+  grid-column: span 5;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -72,60 +50,6 @@
   background-color: #002934;
 }
 
-.tpbo-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.tpbo-table th,
-.tpbo-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.tpbo-table td:last-child {
-  white-space: nowrap;
-}
-
-.tpbo-edit-btn,
-.tpbo-delete-btn {
-  padding: 0.4rem 0.8rem;
-  margin: 0 0.2rem;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.tpbo-edit-btn {
-  background-color: #28a745; /* green */
-}
-
-.tpbo-edit-btn:hover {
-  background-color: #218838;
-}
-
-.tpbo-delete-btn {
-  background-color: #dc3545; /* red */
-}
-
-.tpbo-delete-btn:hover {
-  background-color: #c82333;
-}
-
-.tpbo-table-wrapper {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  margin-top: 1rem;
-}
-
 .tpbo-search {
   width: 100%;
   padding: 8px;
@@ -135,37 +59,12 @@
   font-size: 1rem;
 }
 
-  margin-bottom: 2rem;
-}
-
-.tpbo-input {
-  padding: 0.6rem;
+.tpbo-table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  margin-top: 1rem;
 }
-
-.tpbo-buttons {
-  grid-column: span 2;
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.tpbo-buttons button {
-  background-color: #003946;
-  border: none;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.tpbo-buttons button:hover {
-  background-color: #003946;
-}
-
 
 .tpbo-table {
   width: 100%;
@@ -199,7 +98,7 @@
 }
 
 .tpbo-edit-btn {
-  background-color: #28a745; /* green */
+  background-color: #28a745;
 }
 
 .tpbo-edit-btn:hover {
@@ -207,22 +106,9 @@
 }
 
 .tpbo-delete-btn {
-  background-color: #dc3545; /* red */
+  background-color: #dc3545;
 }
 
 .tpbo-delete-btn:hover {
   background-color: #c82333;
-}
-
-.tpbo-table-wrapper {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  margin-top: 1rem;
-}
-
-.tpbo-search {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
 }
