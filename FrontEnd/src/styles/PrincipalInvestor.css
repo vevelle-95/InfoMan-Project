@@ -57,16 +57,16 @@
 .PrincipalInvestor-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.2rem;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 11px;
   overflow: hidden;
 }
 
 .PrincipalInvestor-table th,
 .PrincipalInvestor-table td {
   border: 1px solid #ccc;
-  padding: 0.10rem;
+  padding: 10rem;
   text-align: center;
 }
 
