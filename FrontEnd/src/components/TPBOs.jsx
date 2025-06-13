@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { api } from '../api';
+import debounce from 'lodash.debounce';
 import '../styles/tpbos.css';
 
 function TPBOs() {
   const [tpbos, setTpbos] = useState([]);
-  const [editingId, setEditingId] = useState(null);  // Track if editing
+  const [accounts, setAccounts] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [formData, setFormData] = useState({
     Accnt_ID: '',
     TPBO_ID: '',
@@ -23,20 +27,19 @@ function TPBOs() {
 
   useEffect(() => {
     fetchTpbos();
+    fetchAccounts();
   }, []);
 
-  const fetchTpbos = async () => {
+  const fetchTpbos = async (query = '') => {
     try {
-      const res = await api.get('/tpbos');
+      const endpoint = query ? `/tpbos/search?q=${encodeURIComponent(query)}` : '/tpbos';
+      const res = await api.get(endpoint);
       setTpbos(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const [accounts, setAccounts] = useState([]);
-
-  useEffect(() => {
   const fetchAccounts = async () => {
     try {
       const res = await api.get('/accounts');
@@ -46,18 +49,23 @@ function TPBOs() {
     }
   };
 
-  fetchAccounts();
-}, []);
+  const debouncedSearch = useCallback(
+    debounce((query) => fetchTpbos(query), 300),
+    []
+  );
 
-  // Add or update depending on editing state
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    debouncedSearch(value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editingId) {
-        // Update
         await api.put(`/tpbos/${editingId}`, formData);
       } else {
-        // Create
         await api.post('/tpbos', formData);
       }
       setEditingId(null);
@@ -83,7 +91,6 @@ function TPBOs() {
     }
   };
 
-  // Delete handler
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this TPBO?")) {
       try {
@@ -95,13 +102,11 @@ function TPBOs() {
     }
   };
 
-  // Load data into form for editing
   const handleEdit = (tpbo) => {
     setEditingId(tpbo.TPBO_ID);
     setFormData(tpbo);
   };
 
-  // Cancel editing
   const handleCancel = () => {
     setEditingId(null);
     setFormData({
@@ -121,16 +126,17 @@ function TPBOs() {
     });
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    if (typeof dateString === 'string') {
-      return dateString.includes('T') ? dateString.split('T')[0] : dateString;
-    }
-    return '';
-  };
   return (
     <div className="tpbo-container">
       <h2>TPBOs</h2>
+
+      <input
+        className="tpbo-search"
+        type="text"
+        placeholder="Search by name or ID..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
 
       <form className="tpbo-form" onSubmit={handleSubmit}>
         {Object.keys(formData).map((key) => (
@@ -140,7 +146,7 @@ function TPBOs() {
             placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-            disabled={key === 'TPBO_ID' && editingId !== null} // disable ID editing on update
+            disabled={key === 'TPBO_ID' && editingId !== null}
           />
         ))}
         <div className="tpbo-buttons">
@@ -149,49 +155,51 @@ function TPBOs() {
         </div>
       </form>
 
-      <table className="tpbo-table">
-        <thead>
-          <tr>
-            <th>Account ID</th>
-            <th>TPBO ID</th>
-            <th>TPBO Type</th>
-            <th>Name</th>
-            <th>Relationship</th>
-            <th>Residence</th>
-            <th>Birth Date</th>
-            <th>Birth Place</th>
-            <th>Sex</th>
-            <th>TIN</th>
-            <th>Nationality</th>
-            <th>Occupation</th>
-            <th>Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tpbos.map((tpbo) => (
-            <tr key={tpbo.TPBO_ID}>
-              <td>{accounts.find(acc => acc.Accnt_ID === tpbo.Accnt_ID)?.Accnt_ID}</td>
-              <td>{tpbo.TPBO_ID}</td>
-              <td>{tpbo.TPBO_Type}</td>
-              <td>{tpbo.TPBO_Name}</td>
-              <td>{tpbo.TPBO_Relationship}</td>
-              <td>{tpbo.TPBO_Residence}</td>
-              <td>{formatDate(tpbo.TPBO_Birth_Date)}</td>
-              <td>{tpbo.TPBO_Birth_Place}</td>
-              <td>{tpbo.TPBO_Sex}</td>
-              <td>{tpbo.TPBO_TIN}</td>
-              <td>{tpbo.TPBO_Nationality}</td>
-              <td>{tpbo.TPBO_Occupation}</td>
-              <td>{tpbo.TPBO_Number}</td>
-              <td>
-                <button onClick={() => handleEdit(tpbo)}>Edit</button>
-                <button onClick={() => handleDelete(tpbo.TPBO_ID)}>Delete</button>
-              </td>
+      <div className="tpbo-table-wrapper">
+        <table className="tpbo-table">
+          <thead>
+            <tr>
+              <th>Account ID</th>
+              <th>TPBO ID</th>
+              <th>TPBO Type</th>
+              <th>Name</th>
+              <th>Relationship</th>
+              <th>Residence</th>
+              <th>Birth Date</th>
+              <th>Birth Place</th>
+              <th>Sex</th>
+              <th>TIN</th>
+              <th>Nationality</th>
+              <th>Occupation</th>
+              <th>Number</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tpbos.map((tpbo) => (
+              <tr key={tpbo.TPBO_ID}>
+                <td>{accounts.find(acc => acc.Accnt_ID === tpbo.Accnt_ID)?.Accnt_ID}</td>
+                <td>{tpbo.TPBO_ID}</td>
+                <td>{tpbo.TPBO_Type}</td>
+                <td>{tpbo.TPBO_Name}</td>
+                <td>{tpbo.TPBO_Relationship}</td>
+                <td>{tpbo.TPBO_Residence}</td>
+                <td>{tpbo.TPBO_Birth_Date?.split('T')[0]}</td>
+                <td>{tpbo.TPBO_Birth_Place}</td>
+                <td>{tpbo.TPBO_Sex}</td>
+                <td>{tpbo.TPBO_TIN}</td>
+                <td>{tpbo.TPBO_Nationality}</td>
+                <td>{tpbo.TPBO_Occupation}</td>
+                <td>{tpbo.TPBO_Number}</td>
+                <td>
+                  <button onClick={() => handleEdit(tpbo)}>Edit</button>
+                  <button onClick={() => handleDelete(tpbo.TPBO_ID)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
