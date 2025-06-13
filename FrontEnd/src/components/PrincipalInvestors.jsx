@@ -56,19 +56,40 @@ function PrincipalInvestors() {
     }
   };
 
+  const formatDate = (dateString) => {
+     if (!dateString) return '';
+     const date = new Date(dateString);
+     if (isNaN(date)) return dateString; // fallback if invalid
+     return date.toISOString().split('T')[0]; // outputs YYYY-MM-DD
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editingId) {
-        await api.put(`/principal-investors/${editingId}`, formData);
-      } else {
-        await api.post('/principal-investors', formData);
+      const dataToSend = { ...formData };
+
+      // Format the date to yyyy-mm-dd
+      if (dataToSend.Princip_Investor_Birth_Date) {
+        dataToSend.Princip_Investor_Birth_Date = formatDate(dataToSend.Princip_Investor_Birth_Date);
       }
+
+      if (editingId) {
+        delete dataToSend.Princip_Investor_ID;
+        await api.put(`/principal-investors/${editingId}`, dataToSend, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } else {
+        await api.post('/principal-investors', dataToSend, {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
       setEditingId(null);
       resetForm();
       fetchInvestors();
     } catch (err) {
-      console.error(err);
+      console.error('Submit Error:', err);
     }
   };
 
@@ -120,17 +141,10 @@ function PrincipalInvestors() {
     });
   };
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return isNaN(date) ? '' : date.toISOString().split('T')[0];
-  };
-  
   return (
     <div className="shared-container">
       <h2>Principal Investors</h2>
 
-      {/* Search Field */}
       <input
         className="shared-search"
         type="text"
@@ -145,7 +159,12 @@ function PrincipalInvestors() {
             key={key}
             className="shared-input"
             placeholder={key.replace(/_/g, ' ')}
-            value={formData[key]}
+            type={key === 'Princip_Investor_Birth_Date' ? 'date' : 'text'}
+            value={
+              key === 'Princip_Investor_Birth_Date'
+                ? formatDate(formData[key])
+                : formData[key]
+            }
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
             disabled={key === 'Princip_Investor_ID' && editingId !== null}
           />
