@@ -14,6 +14,7 @@ function PEPs() {
   });
 
   const [accounts, setAccounts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchPeps();
@@ -61,7 +62,7 @@ function PEPs() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this PEP?")) {
+    if (window.confirm('Are you sure you want to delete this PEP?')) {
       try {
         await api.delete(`/peps/${id}`);
         fetchPeps();
@@ -87,9 +88,18 @@ function PEPs() {
     });
   };
 
+  // Filter peps by search term (search in PEP_Name or PEP_ID or Accnt_ID)
+  const filteredPeps = peps.filter(
+    (pep) =>
+      pep.PEP_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pep.PEP_ID.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pep.Accnt_ID.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="shared-container">
       <h2>PEPs</h2>
+
       <form onSubmit={handleSubmit} className="shared-form">
         {Object.keys(formData).map((key) => (
           <input
@@ -103,37 +113,51 @@ function PEPs() {
         ))}
         <div className="shared-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-          {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
+          {editingId && (
+            <button type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
-      <table className="shared-table">
-        <thead>
-          <tr>
-            <th>Account ID</th>
-            <th>PEP ID</th>
-            <th>Name</th>
-            <th>Relationship</th>
-            <th>Govt Position</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {peps.map((pep) => (
-            <tr key={pep.PEP_ID}>
-              <td>{accounts.find(acc => acc.Accnt_ID === pep.Accnt_ID)?.Accnt_ID || ''}</td>
-              <td>{pep.PEP_ID}</td>
-              <td>{pep.PEP_Name}</td>
-              <td>{pep.PEP_Relationship}</td>
-              <td>{pep.PEP_GovtPosition}</td>
-              <td>
-                <button onClick={() => handleEdit(pep)}>Edit</button>
-                <button onClick={() => handleDelete(pep.PEP_ID)}>Delete</button>
-              </td>
+      <input
+        className="shared-input"
+        placeholder="Search by PEP Name, PEP ID, or Account ID"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '1rem' }}
+      />
+
+      <div className="table-scroll">
+        <table className="shared-table">
+          <thead>
+            <tr>
+              <th>Account ID</th>
+              <th>PEP ID</th>
+              <th>Name</th>
+              <th>Relationship</th>
+              <th>Govt Position</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredPeps.map((pep) => (
+              <tr key={pep.PEP_ID}>
+                <td>{accounts.find((acc) => acc.Accnt_ID === pep.Accnt_ID)?.Accnt_ID || ''}</td>
+                <td>{pep.PEP_ID}</td>
+                <td>{pep.PEP_Name}</td>
+                <td>{pep.PEP_Relationship}</td>
+                <td>{pep.PEP_GovtPosition}</td>
+                <td>
+                  <button onClick={() => handleEdit(pep)}>Edit</button>
+                  <button onClick={() => handleDelete(pep.PEP_ID)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
