@@ -59,7 +59,7 @@ function TPBOs() {
     setSearchQuery(value);
     debouncedSearch(value);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -125,11 +125,7 @@ function TPBOs() {
       TPBO_Number: '',
     });
   };
-   const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return isNaN(date) ? '' : date.toISOString().split('T')[0];
-  };
+
   return (
     <div className="tpbo-container">
       <h2>TPBOs</h2>
@@ -188,7 +184,7 @@ function TPBOs() {
                 <td>{tpbo.TPBO_Name}</td>
                 <td>{tpbo.TPBO_Relationship}</td>
                 <td>{tpbo.TPBO_Residence}</td>
-                <td>{formatDate(tpbo.TPBO_Birth_Date)}</td>
+                <td>{tpbo.TPBO_Birth_Date?.split('T')[0]}</td>
                 <td>{tpbo.TPBO_Birth_Place}</td>
                 <td>{tpbo.TPBO_Sex}</td>
                 <td>{tpbo.TPBO_TIN}</td>
@@ -196,8 +192,8 @@ function TPBOs() {
                 <td>{tpbo.TPBO_Occupation}</td>
                 <td>{tpbo.TPBO_Number}</td>
                 <td>
-                  <button onClick={() => handleEdit(tpbo)}>Edit</button>
-                  <button onClick={() => handleDelete(tpbo.TPBO_ID)}>Delete</button>
+                  <button className="tpbo-edit-btn" onClick={() => handleEdit(tpbo)}>Edit</button>
+                  <button className="tpbo-delete-btn" onClick={() => handleDelete(tpbo.TPBO_ID)}>Delete</button>
                 </td>
               </tr>
             ))}
