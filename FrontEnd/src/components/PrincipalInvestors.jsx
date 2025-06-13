@@ -6,7 +6,7 @@ function PrincipalInvestors() {
   const [investors, setInvestors] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(''); // ✅ Search filter
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
     Accnt_ID: '',
