@@ -91,9 +91,8 @@
   font-size: 1rem;
 }
 
-/* Action buttons in table */
-.shared-edit-btn,
-.shared-delete-btn {
+.tpbo-edit-btn,
+.tpbo-delete-btn {
   padding: 0.4rem 0.8rem;
   margin: 0 0.2rem;
   border: none;
@@ -101,21 +100,20 @@
   color: white;
   font-size: 0.8rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.shared-edit-btn {
-  background-color: #218838; /* green */
+.tpbo-edit-btn {
+  background-color: #28a745;
 }
 
-.shared-edit-btn:hover {
-  background-color: #1e7e34;
+.tpbo-edit-btn:hover {
+  background-color: #218838;
 }
 
-.shared-delete-btn {
-  background-color: #c82333; /* red */
+.tpbo-delete-btn {
+  background-color: #dc3545;
 }
 
-.shared-delete-btn:hover {
-  background-color: #a71d2a;
+.tpbo-delete-btn:hover {
+  background-color: #c82333;
 }
