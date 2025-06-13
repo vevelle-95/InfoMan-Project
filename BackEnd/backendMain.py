@@ -137,7 +137,7 @@ def principal_investors():
 
 @app.route('/peps', methods=['POST', 'GET'])
 def peps():
-    keys = ['PEP_ID', 'PEP_Name', 'Position', 'Country']
+    keys = ['PEP_ID', 'PEP_Name', 'PEP_Relationship', 'PEP_GovtPosition']
     return handle_crud('PEPInformation', keys)
 
 @app.route('/peps/<string:PEP_ID>', methods=['GET', 'PUT', 'DELETE'])
