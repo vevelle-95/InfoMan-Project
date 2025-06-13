@@ -6,9 +6,9 @@ import datetime
 app = Flask(__name__)
 CORS(app)
 
-# ----------------------
-# Database Configuration
-# ----------------------
+
+# Database Configuration for connection
+
 db_config = {
     'host': 'localhost',
     'port': 3306,
@@ -17,9 +17,7 @@ db_config = {
     'database': 'InvestmentAccountsDB'
 }
 
-# ----------------------
-# Helper Functions
-# ----------------------
+
 def get_db_connection():
     try:
         return connect(**db_config)
@@ -62,9 +60,9 @@ def validate_date(date_str):
     except ValueError:
         return False
 
-# -------------------------------
-# Generic CRUD Route Handler
-# -------------------------------
+
+# Generic CRUD for the tables
+
 def handle_crud(table, keys, identifier=None):
     if request.method == 'POST':
         data = request.json
@@ -108,9 +106,10 @@ def handle_crud(table, keys, identifier=None):
         result, status = run_query(query, values, commit=True)
         return jsonify(result), status
 
-# -------------------------------
-# Routes using Generic CRUD
-# -------------------------------
+
+# Routes using Generic CRUD for easier handle
+#note: weak to very specific  ruds
+
 @app.route('/accounts', methods=['POST', 'GET'])
 def accounts():
     keys = ['Accnt_ID', 'AccntHolder_No', 'Accnt_Type', 'Accnt_Name', 'Accnt_ITF']
@@ -121,10 +120,9 @@ def single_account(Accnt_ID, AccntHolder_No):
     identifier = {'Accnt_ID': Accnt_ID, 'AccntHolder_No': AccntHolder_No}
     return handle_crud('AccountInformation', [], identifier)
 
-# You can now easily add new modules:
 @app.route('/principal-investors', methods=['POST', 'GET'])
 def principal_investors():
-     keys = [
+    keys = [
         'Accnt_ID', 'Princip_Investor_ID', 'Princip_Investor_Name',
         'Princip_Investor_Birth_Date', 'Princip_Investor_Nationality',
         'Princip_Investor_Perma_Add', 'Princip_Investor_Present_Add',
@@ -135,7 +133,7 @@ def principal_investors():
         'Company_Name', 'Gross_Annual_Income', 'Princip_Investor_Work_Address',
         'Princip_Investor_Mailing_Address', 'PH_TIN'
     ]
-    return handle_crud('PrincipalInvestors', keys)
+    return handle_crud('PrincipalInvestorInformation', keys)
 
 @app.route('/peps', methods=['POST', 'GET'])
 def peps():
@@ -156,14 +154,14 @@ def tpbos():
     ]
     return handle_crud('TPBOInformation', keys)
 
-
 @app.route('/tpbos/<string:TPBO_ID>', methods=['GET', 'PUT', 'DELETE'])
 def single_tpbo(TPBO_ID):
     identifier = {'TPBO_ID': TPBO_ID}
     return handle_crud('TPBOInformation', [], identifier)
 
-
-#create search functions for each table
+# -------------------------------
+# Search Routes
+# -------------------------------
 @app.route('/accounts/search', methods=['GET'])
 def search_accounts():
     query = request.args.get('q', '')
@@ -178,6 +176,7 @@ def search_accounts():
 
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
+
 @app.route('/principal-investors/search', methods=['GET'])
 def search_principal_investors():
     query = request.args.get('q', '')
@@ -185,7 +184,7 @@ def search_principal_investors():
         return jsonify({'error': 'Search query missing'}), 400
 
     sql = """
-        SELECT * FROM PrincipalInvestors
+        SELECT * FROM PrincipalInvestorInformation
         WHERE Princip_Investor_Name LIKE %s OR Accnt_ID LIKE %s
     """
     values = (f'%{query}%', f'%{query}%')
@@ -223,11 +222,7 @@ def search_tpbos():
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
-
-
-
-# -------------------------------
 # Run the App
-# -------------------------------
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
