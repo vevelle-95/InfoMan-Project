@@ -1,42 +1,44 @@
-.shared-container {
+.tpbo-container {
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 0.15px 2em 2em 2em;
+  padding:  0.15px 2em 2em 2em;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #afaeaeaa;
+  background-color: #EAAB00;
+  border-color: #003946;
   border-radius: 5px;
+  border: 3px solid #003946;
 }
 
-.shared-container h2 {
+.tpbo-container h2 {
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  color: #003366;
+  color: #003946;
   text-align: center;
 }
 
-.shared-form {
+.tpbo-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.shared-input {
+.tpbo-input {
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.95rem;
 }
 
-.shared-buttons {
-  grid-column: span 5;
+.tpbo-buttons {
+  grid-column: span 2;
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
-.shared-buttons button {
-  background-color: #007bff;
+.tpbo-buttons button {
+  background-color: #003946;
   border: none;
   color: white;
   padding: 0.6rem 1.2rem;
@@ -45,11 +47,12 @@
   cursor: pointer;
 }
 
-.shared-buttons button:hover {
-  background-color: #0056b3;
+.tpbo-buttons button:hover {
+  background-color: #003946;
 }
 
-.shared-table {
+
+.tpbo-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
@@ -58,13 +61,48 @@
   overflow: hidden;
 }
 
-.shared-table th,
-.shared-table td {
+.tpbo-table th,
+.tpbo-table td {
   border: 1px solid #ccc;
-  padding: 0.25rem;
-  text-align: middle;
+  padding: 0.6rem;
+  text-align: left;
 }
 
-.shared-table th {
+.tpbo-table th {
   background-color: #f2f2f2;
+}
+
+.tpbo-table td {
+  vertical-align: middle;
+}
+
+.tpbo-table td:last-child {
+  white-space: nowrap;
+}
+
+.tpbo-edit-btn,
+.tpbo-delete-btn {
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.2rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.tpbo-edit-btn {
+  background-color: #28a745; /* green */
+}
+
+.tpbo-edit-btn:hover {
+  background-color: #218838;
+}
+
+.tpbo-delete-btn {
+  background-color: #dc3545; /* red */
+}
+
+.tpbo-delete-btn:hover {
+  background-color: #c82333;
 }
