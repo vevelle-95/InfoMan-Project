@@ -63,17 +63,9 @@
 
 .tpbo-table th,
 .tpbo-table td {
-  border: 1px solid #ccc;
-  padding: 0.6rem;
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: left;
-}
-
-.tpbo-table th {
-  background-color: #f2f2f2;
-}
-
-.tpbo-table td {
-  vertical-align: middle;
 }
 
 .tpbo-table td:last-child {
@@ -105,4 +97,17 @@
 
 .tpbo-delete-btn:hover {
   background-color: #c82333;
+}
+
+.tpbo-table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+}
+
+.tpbo-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
 }
