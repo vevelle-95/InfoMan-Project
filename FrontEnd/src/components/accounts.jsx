@@ -32,7 +32,7 @@ function Accounts() {
     e.preventDefault();
     try {
       if (editingAccntID && editingHolderNo) {
-        await api.put(`/accounts/${editingAccntID}/${editingHolderNo}`, formData);
+        await api.put(`/accounts/${editingAccntID}/${parseInt(editingHolderNo)}`, formData);
       } else {
         await api.post('/accounts', formData);
       }
