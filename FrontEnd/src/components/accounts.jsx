@@ -11,7 +11,8 @@ function Accounts() {
     Accnt_Name: '',
     Accnt_ITF: '',
   });
-  const [editingId, setEditingId] = useState(null);
+  const [editingAccntID, setEditingAccntID] = useState(null);
+  const [editingHolderNo, setEditingHolderNo] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -30,8 +31,8 @@ function Accounts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editingId) {
-        await api.put(`/accounts/${editingId}`, formData);
+      if (editingAccntID && editingHolderNo) {
+        await api.put(`/accounts/${editingAccntID}/${editingHolderNo}`, formData);
       } else {
         await api.post('/accounts', formData);
       }
@@ -42,23 +43,23 @@ function Accounts() {
     }
   };
 
-  const handleEdit = (account) => {
-    setFormData(account);
-    setEditingId(account.Accnt_ID);
+  const handleEdit = (acc) => {
+    setFormData(acc);
+    setEditingAccntID(acc.Accnt_ID);
+    setEditingHolderNo(acc.AccntHolder_No);
   };
 
- const handleDelete = async (Accnt_ID, AccntHolder_No) => {
+  const handleDelete = async (Accnt_ID, AccntHolder_No) => {
   try {
     await api.delete(`/accounts/${Accnt_ID}/${AccntHolder_No}`);
     fetchAccounts();
-    if (editingId === Accnt_ID) {
+    if (editingAccntID === Accnt_ID && editingHolderNo === AccntHolder_No) {
       resetForm();
     }
   } catch (err) {
     console.error(err);
   }
-};
-
+  };
 
   const handleCancel = () => {
     resetForm();
@@ -72,7 +73,8 @@ function Accounts() {
       Accnt_Name: '',
       Accnt_ITF: '',
     });
-    setEditingId(null);
+    setEditingAccntID(null);
+    setEditingHolderNo(null);
   };
 
   return (
@@ -97,13 +99,20 @@ function Accounts() {
             placeholder={key.replace(/_/g, ' ')}
             value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-            disabled={key === 'Accnt_ID' && editingId !== null}
+            disabled={
+              (key === 'Accnt_ID' && editingAccntID !== null) ||
+              (key === 'AccntHolder_No' && editingHolderNo !== null)
+            }
           />
         ))}
 
         <div className="shared-buttons">
-          <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-          {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
+          <button type="submit">{editingAccntID ? 'Update' : 'Add'}</button>
+          {(editingAccntID || editingHolderNo) && (
+            <button type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          )}
         </div>
       </form>
 
