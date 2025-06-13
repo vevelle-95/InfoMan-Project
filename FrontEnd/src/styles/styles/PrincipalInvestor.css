@@ -3,14 +3,15 @@
   margin: 2em auto;
   padding: 0.15px 2em 2em 2em;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #afaeaeaa;
+  background-color: #EAAB00;
   border-radius: 5px;
+  border: 3px solid #003946;
 }
 
 .PrincipalInvestor-container h2 {
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  color: #003366;
+  color: #003946;
   text-align: center;
 }
 
@@ -38,7 +39,7 @@
 }
 
 .PrincipalInvestor-buttons button {
-  background-color: #007bff;
+  background-color: #003946;
   border: none;
   color: white;
   padding: 0.6rem 1.4rem;
@@ -49,7 +50,7 @@
 }
 
 .PrincipalInvestor-buttons button:hover {
-  background-color: #0056b3;
+  background-color: #003946;
 }
 
 /* Table styling */
