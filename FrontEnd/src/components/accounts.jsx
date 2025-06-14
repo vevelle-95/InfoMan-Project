@@ -67,6 +67,18 @@ function Accounts() {
     resetForm();
   };
 
+  const handleCascadeDelete = async (Accnt_ID, AccntHolder_No) => {
+    if (window.confirm("This will delete the account and all related entries. Are you sure?")) {
+      try {
+        await api.delete(`/accounts/cascade/${Accnt_ID}/${parseInt(AccntHolder_No)}`);
+        fetchAccounts();
+        resetForm();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       Accnt_ID: '',
@@ -148,7 +160,10 @@ function Accounts() {
                   <td>
                     <button onClick={() => handleEdit(acc)}>Edit</button>
                     <button onClick={() => handleDelete(acc.Accnt_ID, acc.AccntHolder_No)}>Delete</button>
-                  </td>
+                  <button className="account-delete-cascade-btn" onClick={() => handleCascadeDelete(acc.Accnt_ID, acc.AccntHolder_No)}>
+                    Delete the Account
+                  </button>
+                 </td>
                 </tr>
               ))}
           </tbody>
