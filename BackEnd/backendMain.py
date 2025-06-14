@@ -222,6 +222,21 @@ def search_tpbos():
     result, status = run_query(sql, values, fetchall=True)
     return jsonify(result), status
 
+@app.route('/accounts/cascade/<accnt_id>/<int:accnt_holder_no>', methods=['DELETE'])
+def delete_account_cascade(accnt_id, accnt_holder_no):
+    try:
+        with connect(**db_config) as conn:
+            with conn.cursor() as cursor:
+                # Adjust table names accordingly
+                cursor.execute("DELETE FROM PrincipalInvestorInformation WHERE Accnt_ID = %s", (accnt_id,))
+                cursor.execute("DELETE FROM TPBOInformation WHERE Accnt_ID = %s", (accnt_id,))
+                cursor.execute("DELETE FROM PEPInformation WHERE Accnt_ID = %s", (accnt_id,))
+                cursor.execute("DELETE FROM AccountInformation WHERE Accnt_ID = %s AND AccntHolder_No = %s", (accnt_id, accnt_holder_no))
+                conn.commit()
+        return jsonify({'message': 'Cascade delete successful'}), 200
+    except Error as e:
+        return jsonify({'error': str(e)}), 500
+
 # Run the App
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
