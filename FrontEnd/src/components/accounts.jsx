@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
-import '../styles/FormStyles.css';
+import '../styles/account.css';
 
 function Accounts() {
   const [accounts, setAccounts] = useState([]);
