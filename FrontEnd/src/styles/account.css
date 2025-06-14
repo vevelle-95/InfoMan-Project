@@ -1,0 +1,130 @@
+.account-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0.15px 2em 2em 2em;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #EAAB00;
+  border: 3px solid #003946;
+  border-radius: 5px;
+}
+
+.account-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #003946;
+  text-align: center;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.account-input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.account-buttons {
+  grid-column: span 5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.account-buttons button {
+  background-color: #003946;
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-buttons button:hover {
+  background-color: #002934;
+}
+
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.account-table th,
+.account-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.account-table td:last-child {
+  white-space: nowrap;
+}
+
+.account-table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-top: 1rem;
+}
+
+.account-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.account-edit-btn,
+.account-delete-btn {
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.2rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.account-edit-btn {
+  background-color: #28a745;
+}
+
+.account-edit-btn:hover {
+  background-color: #218838;
+}
+
+.account-delete-btn {
+  background-color: #dc3545;
+}
+
+.account-delete-btn:hover {
+  background-color: #c82333;
+}
+
+.account-delete-cascade-btn {
+  background-color: #ff9900;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.account-delete-cascade-btn:hover {
+  background-color: #c82333;
+}
