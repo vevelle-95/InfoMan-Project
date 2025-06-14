@@ -49,20 +49,6 @@ function Accounts() {
     setEditingHolderNo(acc.AccntHolder_No);
   };
 
-  const handleDelete = async (Accnt_ID, AccntHolder_No) => {
-    if (window.confirm("Are you sure you want to delete this account?")) {
-      try {
-        await api.delete(`/accounts/${Accnt_ID}/${parseInt(AccntHolder_No)}`);
-        fetchAccounts();
-        if (editingAccntID === Accnt_ID && editingHolderNo === AccntHolder_No) {
-          resetForm();
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
   const handleCancel = () => {
     resetForm();
   };
@@ -159,7 +145,6 @@ function Accounts() {
                   <td>{acc.Accnt_ITF}</td>
                   <td>
                     <button onClick={() => handleEdit(acc)}>Edit</button>
-                    <button onClick={() => handleDelete(acc.Accnt_ID, acc.AccntHolder_No)}>Delete</button>
                   <button className="account-delete-cascade-btn" onClick={() => handleCascadeDelete(acc.Accnt_ID, acc.AccntHolder_No)}>
                     Delete the Account
                   </button>
