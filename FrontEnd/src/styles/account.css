@@ -87,8 +87,7 @@
   font-size: 1rem;
 }
 
-.account-edit-btn,
-.account-delete-btn {
+.account-edit-btn {
   padding: 0.4rem 0.8rem;
   margin: 0 0.2rem;
   border: none;
@@ -96,22 +95,11 @@
   color: white;
   font-size: 0.8rem;
   cursor: pointer;
-}
-
-.account-edit-btn {
-  background-color: #28a745;
+  background-color: #28a745
 }
 
 .account-edit-btn:hover {
   background-color: #218838;
-}
-
-.account-delete-btn {
-  background-color: #dc3545;
-}
-
-.account-delete-btn:hover {
-  background-color: #c82333;
 }
 
 .account-delete-cascade-btn {
