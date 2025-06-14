@@ -1,47 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api';
-import '../styles/PrincipalInvestor.css';
+import '../styles/pep.css';
 
-function PrincipalInvestors() {
-  const [investors, setInvestors] = useState([]);
+function PEPs() {
+  const [peps, setPeps] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
     Accnt_ID: '',
-    Princip_Investor_ID: '',
-    Princip_Investor_Name: '',
-    Princip_Investor_Perma_Add: '',
-    Princip_Investor_Present_Add: '',
-    Princip_Investor_HomeNo: '',
-    Princip_Investor_Birth_Date: '',
-    Princip_Investor_Nationality: '',
-    Princip_Investor_Sex: '',
-    Princip_Investor_Civil_Status: '',
-    Princip_Investor_Birth_Place: '',
-    Princip_Investor_Email_Add: '',
-    SSS_No: '',
-    Princip_Investor_WorkNo: '',
-    Princip_Investor_Occupation: '',
-    Nature_Work: '',
-    Job_Description: '',
-    Company_Name: '',
-    Gross_Annual_Income: '',
-    Princip_Investor_Work_Address: '',
-    Princip_Investor_Mailing_Address: '',
-    PH_TIN: '',
+    PEP_ID: '',
+    PEP_Name: '',
+    PEP_Relationship: '',
+    PEP_GovtPosition: '',
   });
 
   useEffect(() => {
-    fetchInvestors();
+    fetchPeps();
     fetchAccounts();
   }, []);
 
-  const fetchInvestors = async () => {
+  const fetchPeps = async () => {
     try {
-      const res = await api.get('/principal-investors');
-      setInvestors(res.data);
+      const res = await api.get('/peps');
+      setPeps(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -56,99 +39,78 @@ function PrincipalInvestors() {
     }
   };
 
-  const formatDate = (dateString) => {
-     if (!dateString) return '';
-     const date = new Date(dateString);
-     if (isNaN(date)) return dateString; // fallback if invalid
-     return date.toISOString().split('T')[0]; // outputs YYYY-MM-DD
-  };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const dataToSend = { ...formData };
-
-      // Format the date to yyyy-mm-dd
-      if (dataToSend.Princip_Investor_Birth_Date) {
-        dataToSend.Princip_Investor_Birth_Date = formatDate(dataToSend.Princip_Investor_Birth_Date);
-      }
-
       if (editingId) {
-        delete dataToSend.Princip_Investor_ID;
-        await api.put(`/principal-investors/${editingId}`, dataToSend, {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        await api.put(`/peps/${editingId}`, formData);
       } else {
-        await api.post('/principal-investors', dataToSend, {
-          headers: { 'Content-Type': 'application/json' },
-        });
+        await api.post('/peps', formData);
       }
-
+      fetchPeps();
       setEditingId(null);
-      resetForm();
-      fetchInvestors();
+      setFormData({
+        Accnt_ID: '',
+        PEP_ID: '',
+        PEP_Name: '',
+        PEP_Relationship: '',
+        PEP_GovtPosition: '',
+      });
     } catch (err) {
-      console.error('Submit Error:', err);
+      console.error(err);
     }
   };
 
-  const handleEdit = (investor) => {
-    setEditingId(investor.Princip_Investor_ID);
-    setFormData(investor);
-  };
-
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this Principal Investor?')) {
+    if (window.confirm('Are you sure you want to delete this PEP?')) {
       try {
-        await api.delete(`/principal-investors/${id}`);
-        fetchInvestors();
+        await api.delete(`/peps/${id}`);
+        fetchPeps();
+        if (editingId === id) {
+          setFormData({
+            Accnt_ID: '',
+            PEP_ID: '',
+            PEP_Name: '',
+            PEP_Relationship: '',
+            PEP_GovtPosition: '',
+          });
+          setEditingId(null);
+        }
       } catch (err) {
         console.error(err);
       }
     }
   };
 
-  const handleCancel = () => {
-    setEditingId(null);
-    resetForm();
+  const handleEdit = (pep) => {
+    setFormData(pep);
+    setEditingId(pep.PEP_ID);
   };
 
-  const resetForm = () => {
+  const handleCancel = () => {
+    setEditingId(null);
     setFormData({
       Accnt_ID: '',
-      Princip_Investor_ID: '',
-      Princip_Investor_Name: '',
-      Princip_Investor_Perma_Add: '',
-      Princip_Investor_Present_Add: '',
-      Princip_Investor_HomeNo: '',
-      Princip_Investor_Birth_Date: '',
-      Princip_Investor_Nationality: '',
-      Princip_Investor_Sex: '',
-      Princip_Investor_Civil_Status: '',
-      Princip_Investor_Birth_Place: '',
-      Princip_Investor_Email_Add: '',
-      SSS_No: '',
-      Princip_Investor_WorkNo: '',
-      Princip_Investor_Occupation: '',
-      Nature_Work: '',
-      Job_Description: '',
-      Company_Name: '',
-      Gross_Annual_Income: '',
-      Princip_Investor_Work_Address: '',
-      Princip_Investor_Mailing_Address: '',
-      PH_TIN: '',
+      PEP_ID: '',
+      PEP_Name: '',
+      PEP_Relationship: '',
+      PEP_GovtPosition: '',
     });
   };
 
+  const filteredPeps = peps.filter((pep) =>
+    Object.values(pep).some((value) =>
+      value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return (
     <div className="shared-container">
-      <h2>Principal Investors</h2>
+      <h2>PEPs</h2>
 
       <input
         className="shared-search"
-        type="text"
-        placeholder="Search by Name, ID, Email, etc."
+        placeholder="Search by any field..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
@@ -159,89 +121,43 @@ function PrincipalInvestors() {
             key={key}
             className="shared-input"
             placeholder={key.replace(/_/g, ' ')}
-            type={key === 'Princip_Investor_Birth_Date' ? 'date' : 'text'}
-            value={
-              key === 'Princip_Investor_Birth_Date'
-                ? formatDate(formData[key])
-                : formData[key]
-            }
+            value={formData[key]}
             onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-            disabled={key === 'Princip_Investor_ID' && editingId !== null}
+            disabled={key === 'PEP_ID' && editingId !== null}
           />
         ))}
-
         <div className="shared-buttons">
           <button type="submit">{editingId ? 'Update' : 'Add'}</button>
           {editingId && <button type="button" onClick={handleCancel}>Cancel</button>}
         </div>
       </form>
 
-      <div className="shared-table-wrapper scrollable-table">
+      <div className="shared-table-wrapper">
         <table className="shared-table">
           <thead>
             <tr>
               <th>Account ID</th>
-              <th>Investor ID</th>
+              <th>PEP ID</th>
               <th>Name</th>
-              <th>Permanent Address</th>
-              <th>Present Address</th>
-              <th>Home No</th>
-              <th>Birth Date</th>
-              <th>Nationality</th>
-              <th>Sex</th>
-              <th>Civil Status</th>
-              <th>Birth Place</th>
-              <th>Email</th>
-              <th>SSS No</th>
-              <th>Work No</th>
-              <th>Occupation</th>
-              <th>Nature of Work</th>
-              <th>Job Description</th>
-              <th>Company Name</th>
-              <th>Annual Income</th>
-              <th>Work Address</th>
-              <th>Mailing Address</th>
-              <th>PH TIN</th>
+              <th>Relationship</th>
+              <th>Govt Position</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {investors
-              .filter((inv) =>
-                Object.values(inv).some((value) =>
-                  value?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-                )
-              )
-              .map((inv) => (
-                <tr key={inv.Princip_Investor_ID}>
-                  <td>{accounts.find(acc => acc.Accnt_ID === inv.Accnt_ID)?.Accnt_ID || ''}</td>
-                  <td>{inv.Princip_Investor_ID}</td>
-                  <td>{inv.Princip_Investor_Name}</td>
-                  <td>{inv.Princip_Investor_Perma_Add}</td>
-                  <td>{inv.Princip_Investor_Present_Add}</td>
-                  <td>{inv.Princip_Investor_HomeNo}</td>
-                  <td>{formatDate(inv.Princip_Investor_Birth_Date)}</td>
-                  <td>{inv.Princip_Investor_Nationality}</td>
-                  <td>{inv.Princip_Investor_Sex}</td>
-                  <td>{inv.Princip_Investor_Civil_Status}</td>
-                  <td>{inv.Princip_Investor_Birth_Place}</td>
-                  <td>{inv.Princip_Investor_Email_Add}</td>
-                  <td>{inv.SSS_No}</td>
-                  <td>{inv.Princip_Investor_WorkNo}</td>
-                  <td>{inv.Princip_Investor_Occupation}</td>
-                  <td>{inv.Nature_Work}</td>
-                  <td>{inv.Job_Description}</td>
-                  <td>{inv.Company_Name}</td>
-                  <td>{inv.Gross_Annual_Income}</td>
-                  <td>{inv.Princip_Investor_Work_Address}</td>
-                  <td>{inv.Princip_Investor_Mailing_Address}</td>
-                  <td>{inv.PH_TIN}</td>
-                  <td>
-                    <button onClick={() => handleEdit(inv)}>Edit</button>
-                    <button onClick={() => handleDelete(inv.Princip_Investor_ID)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
+            {filteredPeps.map((pep) => (
+              <tr key={pep.PEP_ID}>
+                <td>{accounts.find((acc) => acc.Accnt_ID === pep.Accnt_ID)?.Accnt_ID || ''}</td>
+                <td>{pep.PEP_ID}</td>
+                <td>{pep.PEP_Name}</td>
+                <td>{pep.PEP_Relationship}</td>
+                <td>{pep.PEP_GovtPosition}</td>
+                <td>
+                  <button onClick={() => handleEdit(pep)}>Edit</button>
+                  <button onClick={() => handleDelete(pep.PEP_ID)}>Delete</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -249,4 +165,4 @@ function PrincipalInvestors() {
   );
 }
 
-export default PrincipalInvestors;
+export default PEPs;
